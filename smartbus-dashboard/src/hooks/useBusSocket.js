@@ -11,6 +11,11 @@ const INITIAL_DATA = {
   status: 'GREEN',
   camera_ok: false,
   timestamp: 0,
+  source: 'camera',
+  mode: 'ai',
+  ai_ok: false,
+  fps: 0,
+  active_tracks: 0,
 };
 
 /**

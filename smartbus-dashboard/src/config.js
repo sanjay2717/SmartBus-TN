@@ -5,6 +5,9 @@ export const CONFIG = {
   WS_URL:
     import.meta.env.VITE_WS_URL || 'ws://localhost:8000/ws',
 
+  API_URL:
+    import.meta.env.VITE_API_URL || 'http://localhost:8000',
+
   CAMERA_STREAM_URL:
     import.meta.env.VITE_CAMERA_URL || 'http://localhost:8000/video',
 
