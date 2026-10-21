@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Environment files (keep .env.example, ignore real secrets)
+.env
+.env.local
+.env.*.local
+
+# Vite cache
+.vite/
+
+# Editor / OS artifacts
+.DS_Store
+Thumbs.db
+*.log
