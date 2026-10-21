@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartBus TN - 55-inch 4K Public Expo Display</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&display=swap');
+
+    :root {
+      --bg: #0b1020;
+      --panel-bg: #141b31;
+      --border: #24304f;
+      --text: #e8ecf8;
+      --muted: #93a0c0;
+      --green-accent: #22c55e;
+      --blue-accent: #3b82f6;
+      --purple-accent: #a855f7;
+      --amber-accent: #f59e0b;
+    }
+
+    .light-theme {
+      --bg: #f5f7fc;
+      --panel-bg: #ffffff;
+      --border: #d8e0ee;
+      --text: #0f172a;
+      --muted: #5b6884;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      cursor: none !important; /* Touch-safe public display: no cursor, no pointer */
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum" 1, "cv05" 1;
+      font-weight: 600;
+    }
+
+    /* Scaling rules based on viewport width (vw) for 4K / 1080p display */
+    .bento-card {
+      background-color: var(--panel-bg);
+      border: 0.16vw solid var(--border);
+      border-radius: 1.25vw; /* ~24px at 1920 */
+      box-shadow: 0 1vw 2.5vw -0.5vw rgba(0, 0, 0, 0.45);
+      position: relative;
+    }
+
+    .light-theme .bento-card {
+      box-shadow: 0 1vw 2.5vw -0.5vw rgba(15, 23, 42, 0.08);
+    }
+
+    /* Smooth bus sliding animation on the route */
+    @keyframes busSlide {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-0.25vw); }
+    }
+
+    .animate-bus {
+      animation: busSlide 2.5s ease-in-out infinite;
+    }
+
+    /* Subtle next stop pulse glow */
+    @keyframes stopPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+      50% { box-shadow: 0 0 0 0.8vw rgba(59, 130, 246, 0); }
+    }
+
+    .pulse-glow {
+      animation: stopPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    /* Bounding box reticle pulse */
+    @keyframes reticlePulse {
+      0%, 100% { opacity: 0.95; }
+      50% { opacity: 0.75; }
+    }
+
+    .cv-box {
+      animation: reticlePulse 1.8s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="flex flex-col justify-between w-screen h-screen p-[1.5vw] select-none">
+
+  <!-- TOP BAR: Approx 8% of screen height -->
+  <header class="w-full h-[8vh] flex items-center justify-between px-[1.8vw] py-[0.5vh] bento-card mb-[1.2vh] shrink-0">
+    <!-- Left: Branding & Subtitle -->
+    <div class="flex flex-col justify-center">
+      <div class="flex items-center gap-[0.8vw]">
+        <h1 class="text-[1.85vw] font-black tracking-tight leading-none text-[var(--text)] uppercase">
+          SmartBus TN
+        </h1>
+        <span class="inline-block w-[0.45vw] h-[0.45vw] rounded-full bg-[var(--muted)] opacity-60"></span>
+        <span class="text-[1.1vw] font-bold tracking-wide text-[var(--muted)] uppercase">
+          Public Expo Live Display
+        </span>
+      </div>
+      <p class="text-[1.05vw] font-bold text-[var(--muted)] tracking-wider mt-[0.3vh]">
+        TN-01 · TIRUPPUR → KARUR
+      </p>
+    </div>
+
+    <!-- Right: Connection Pill & Display Theme Indicator -->
+    <div class="flex items-center gap-[1.2vw]">
+      <!-- Status Pill -->
+      <div class="flex items-center gap-[0.6vw] px-[1.2vw] py-[0.7vh] rounded-full border border-green-500/40 bg-green-500/10">
+        <span class="w-[0.75vw] h-[0.75vw] rounded-full bg-green-500 animate-pulse"></span>
+        <span class="text-[1.05vw] font-extrabold tracking-widest text-green-400 uppercase">
+          CONNECTED
+        </span>
+      </div>
+
+      <!-- Theme Mode Indicator (Non-clickable / Touch-safe) -->
+      <div class="flex items-center gap-[0.5vw] px-[1.1vw] py-[0.7vh] rounded-full border border-[var(--border)] bg-black/20" title="Auto Mode / Expo Preset">
+        <svg class="w-[1.2vw] h-[1.2vw] text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+        </svg>
+        <span class="text-[0.9vw] font-bold text-[var(--muted)] uppercase tracking-wider">
+          DARK MODE (EXPO)
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN BENTO GRID: Fills remaining height minus top and bottom bars (~82vh) -->
+  <main class="grid grid-cols-3 grid-rows-2 gap-[1.3vw] flex-1 w-full min-h-0">
+
+    <!-- TILE A: ROUTE PROGRESSION (Top-left, spans 2 columns, 1 row) -->
+    <section class="col-span-2 bento-card p-[1.8vw] flex flex-col justify-between">
+      <!-- Panel Header: >= 3% screen height (~3.2vh) -->
+      <div class="flex items-center justify-between pb-[1vh] border-b border-[var(--border)]">
+        <div class="flex items-center gap-[1vw]">
+          <span class="text-[1.35vw] font-black tracking-wider uppercase text-[var(--text)]">
+            ROUTE PROGRESSION
+          </span>
+          <span class="px-[0.9vw] py-[0.4vh] rounded-md bg-blue-600/20 border border-blue-500/50 text-blue-400 text-[0.95vw] font-extrabold tracking-wide uppercase">
+            NEXT STOP: PALLADAM (ETA 32s)
+          </span>
+        </div>
+        <span class="px-[1vw] py-[0.4vh] rounded-md bg-amber-500/20 border border-amber-500/50 text-amber-400 text-[0.95vw] font-black tracking-widest uppercase">
+          SIMULATED
+        </span>
+      </div>
+
+      <!-- Route Stepper Graphic (Massively scaled for 4m viewing distance) -->
+      <div class="relative w-full px-[2vw] py-[2vh] flex items-center justify-between my-auto">
+        <!-- Background Track Line -->
+        <div class="absolute left-[3vw] right-[3vw] top-[50%] -translate-y-1/2 h-[0.55vw] bg-[#24304f] rounded-full z-0"></div>
+
+        <!-- Completed Line Progress (Tiruppur to Palladam) -->
+        <div class="absolute left-[3vw] w-[22%] top-[50%] -translate-y-1/2 h-[0.55vw] bg-blue-500 rounded-full z-0"></div>
+
+        <!-- Stop 1: Tiruppur (Departed) -->
+        <div class="relative z-10 flex flex-col items-center">
+          <div class="w-[3.6vw] h-[3.6vw] rounded-full bg-slate-800 border-[0.25vw] border-slate-600 flex items-center justify-center text-slate-300 font-black shadow-lg">
+            <svg class="w-[1.8vw] h-[1.8vw] text-slate-400 stroke-[3.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+            </svg>
+          </div>
+          <div class="mt-[1.2vh] text-center">
+            <div class="text-[1.25vw] font-black text-[var(--text)] tracking-tight">Tiruppur</div>
+            <div class="text-[0.95vw] font-bold text-slate-500 uppercase tracking-wider">Departed</div>
+          </div>
+        </div>
+
+        <!-- Live Bus Icon Indicator (Hovering on the line towards Palladam) -->
+        <div class="absolute left-[18%] top-[12%] -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center animate-bus">
+          <div class="px-[0.8vw] py-[0.45vh] rounded-lg bg-blue-600 text-white font-extrabold text-[0.95vw] flex items-center gap-[0.4vw] shadow-[0_0_1.5vw_rgba(37,99,235,0.8)] border border-blue-400">
+            <svg class="w-[1.2vw] h-[1.2vw]" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"/>
+            </svg>
+            <span>TN-01</span>
+          </div>
+          <div class="w-0 h-0 border-x-[0.45vw] border-x-transparent border-t-[0.45vw] border-t-blue-600"></div>
+        </div>
+
+        <!-- Stop 2: Palladam (Next Stop - Glowing / Highlighted) -->
+        <div class="relative z-10 flex flex-col items-center">
+          <div class="w-[4.2vw] h-[4.2vw] rounded-full bg-blue-600 border-[0.3vw] border-blue-400 flex items-center justify-center text-white font-black text-[1.6vw] pulse-glow shadow-xl">
+            2
+          </div>
+          <div class="mt-[1.2vh] text-center">
+            <div class="text-[1.4vw] font-black text-blue-400 tracking-tight">Palladam</div>
+            <div class="text-[1.05vw] font-extrabold text-blue-300 uppercase tracking-wider">Next (32s)</div>
+          </div>
+        </div>
+
+        <!-- Stop 3: Dharapuram -->
+        <div class="relative z-10 flex flex-col items-center opacity-85">
+          <div class="w-[3.6vw] h-[3.6vw] rounded-full bg-[#1e293b] border-[0.2vw] border-[var(--border)] flex items-center justify-center text-[var(--muted)] font-black text-[1.3vw]">
+            3
+          </div>
+          <div class="mt-[1.2vh] text-center">
+            <div class="text-[1.2vw] font-extrabold text-[var(--text)] tracking-tight">Dharapuram</div>
+            <div class="text-[0.95vw] font-bold text-[var(--muted)]">ETA 18m</div>
+          </div>
+        </div>
+
+        <!-- Stop 4: Vellakoil -->
+        <div class="relative z-10 flex flex-col items-center opacity-85">
+          <div class="w-[3.6vw] h-[3.6vw] rounded-full bg-[#1e293b] border-[0.2vw] border-[var(--border)] flex items-center justify-center text-[var(--muted)] font-black text-[1.3vw]">
+            4
+          </div>
+          <div class="mt-[1.2vh] text-center">
+            <div class="text-[1.2vw] font-extrabold text-[var(--text)] tracking-tight">Vellakoil</div>
+            <div class="text-[0.95vw] font-bold text-[var(--muted)]">ETA 34m</div>
+          </div>
+        </div>
+
+        <!-- Stop 5: Karur (Terminus) -->
+        <div class="relative z-10 flex flex-col items-center opacity-85">
+          <div class="w-[3.6vw] h-[3.6vw] rounded-full bg-[#1e293b] border-[0.2vw] border-[var(--border)] flex items-center justify-center text-[var(--muted)] font-black text-[1.3vw]">
+            5
+          </div>
+          <div class="mt-[1.2vh] text-center">
+            <div class="text-[1.2vw] font-extrabold text-[var(--text)] tracking-tight">Karur</div>
+            <div class="text-[0.95vw] font-bold text-[var(--muted)] uppercase">Terminus</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Route Status Footer Row -->
+      <div class="flex items-center justify-between pt-[1vh] border-t border-[var(--border)] text-[1.05vw] font-bold text-[var(--muted)]">
+        <div class="flex items-center gap-[0.7vw]">
+          <span class="w-[0.6vw] h-[0.6vw] rounded-full bg-blue-500 animate-ping"></span>
+          <span>CURRENT SPEED: <strong class="text-[var(--text)] font-extrabold text-[1.15vw]">48 km/h</strong></span>
+        </div>
+        <div>
+          SCHEDULED ARRIVAL AT KARUR: <strong class="text-[var(--text)] font-extrabold text-[1.15vw]">14:45 IST</strong>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- TILE B: ON BOARD KPI PANEL (Top-right, spans 1 col, 2 rows — Visual Hero) -->
+    <!-- READABILITY MANDATE: Headline numbers occupy >= 25% screen height -->
+    <section class="row-span-2 bento-card p-[2vw] flex flex-col justify-between items-center text-center">
+      <!-- Panel Header -->
+      <div class="w-full flex items-center justify-between pb-[1.2vh] border-b border-[var(--border)]">
+        <span class="text-[1.4vw] font-black tracking-wider uppercase text-[var(--text)]">
+          ON BOARD
+        </span>
+        <span class="px-[1vw] py-[0.5vh] rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 text-[0.95vw] font-extrabold tracking-widest uppercase">
+          NORMAL DENSITY
+        </span>
+      </div>
+
+      <!-- MASSIVE HERO READOUT: Occupancy Ratio & Percentage (At least 25% of 1080p height) -->
+      <div class="my-auto flex flex-col items-center justify-center w-full">
+        <!-- Giant "4 / 10" headline number -->
+        <div class="flex items-baseline justify-center leading-none tracking-tighter">
+          <span class="text-[12.5vw] font-black text-[var(--text)] leading-none select-none drop-shadow-[0_0.4vw_0.8vw_rgba(0,0,0,0.5)]">
+            4
+          </span>
+          <span class="text-[4.5vw] font-extrabold text-[var(--muted)] ml-[0.6vw] tracking-normal">
+            / 10
+          </span>
+        </div>
+
+        <!-- Huge "40%" reading -->
+        <div class="text-[6.5vw] font-black text-emerald-400 tracking-tight leading-none mt-[0.5vh]">
+          40%
+        </div>
+
+        <!-- Thick 40% Color Bar (Massive gauge height for 4m viewing distance) -->
+        <div class="w-full h-[1.8vw] bg-[#24304f] rounded-full overflow-hidden mt-[2.5vh] p-[0.25vw] border border-[var(--border)]">
+          <div class="h-full bg-gradient-to-r from-emerald-500 to-green-400 rounded-full w-[40%] shadow-[0_0_1.5vw_rgba(34,197,94,0.6)]"></div>
+        </div>
+
+        <!-- Status Word: GREEN (Massive, high-contrast) -->
+        <div class="mt-[2.2vh] flex items-center justify-center gap-[0.8vw]">
+          <span class="w-[1.2vw] h-[1.2vw] rounded-full bg-emerald-400 shadow-[0_0_1vw_rgba(52,211,153,0.9)]"></span>
+          <span class="text-[2.6vw] font-black tracking-widest text-emerald-400 uppercase">
+            GREEN
+          </span>
+        </div>
+      </div>
+
+      <!-- Capacity & Safety Meta Footer -->
+      <div class="w-full pt-[1.5vh] border-t border-[var(--border)] flex items-center justify-between">
+        <div class="text-[1.1vw] font-bold text-[var(--muted)]">
+          AVAILABLE SEATS: <strong class="text-[var(--text)] font-extrabold text-[1.3vw]">6</strong>
+        </div>
+        <div class="px-[1vw] py-[0.5vh] rounded-md bg-slate-800/80 border border-slate-700 text-slate-300 font-extrabold text-[1vw] tracking-wider uppercase">
+          DEMO CAPACITY 10
+        </div>
+      </div>
+    </section>
+
+
+    <!-- TILE C: CROSSINGS (Bottom-left, 1 col, 1 row) -->
+    <section class="bento-card p-[1.8vw] flex flex-col justify-between">
+      <!-- Panel Header: >= 3% screen height -->
+      <div class="flex items-center justify-between pb-[1vh] border-b border-[var(--border)]">
+        <span class="text-[1.35vw] font-black tracking-wider uppercase text-[var(--text)]">
+          CROSSINGS
+        </span>
+        <span class="text-[1.05vw] font-extrabold text-[var(--muted)] uppercase tracking-wider">
+          TRIP CUMULATIVE
+        </span>
+      </div>
+
+      <!-- Dual Side-by-Side Cards (Boarded & Alighted) -->
+      <div class="grid grid-cols-2 gap-[1.2vw] my-auto">
+        <!-- Boarded Card (Blue) -->
+        <div class="p-[1.4vw] rounded-2xl bg-blue-950/40 border-[0.2vw] border-blue-500/50 flex flex-col items-center justify-center text-center shadow-md">
+          <div class="text-[1.2vw] font-black text-blue-400 uppercase tracking-widest">
+            BOARDED
+          </div>
+          <div class="text-[5.5vw] font-black text-blue-400 leading-none my-[0.5vh]">
+            5
+          </div>
+          <div class="text-[1.05vw] font-bold text-blue-200/80 tracking-wide">
+            Passengers In
+          </div>
+        </div>
+
+        <!-- Alighted Card (Purple) -->
+        <div class="p-[1.4vw] rounded-2xl bg-purple-950/40 border-[0.2vw] border-purple-500/50 flex flex-col items-center justify-center text-center shadow-md">
+          <div class="text-[1.2vw] font-black text-purple-400 uppercase tracking-widest">
+            ALIGHTED
+          </div>
+          <div class="text-[5.5vw] font-black text-purple-400 leading-none my-[0.5vh]">
+            1
+          </div>
+          <div class="text-[1.05vw] font-bold text-purple-200/80 tracking-wide">
+            Passengers Out
+          </div>
+        </div>
+      </div>
+
+      <!-- Net Formula Readout -->
+      <div class="pt-[1vh] border-t border-[var(--border)] flex items-center justify-center text-[1.1vw] font-bold text-[var(--muted)]">
+        <span>NET OCCUPANCY:&nbsp;&nbsp;5 (IN) − 1 (OUT) =&nbsp;</span>
+        <strong class="text-emerald-400 font-extrabold text-[1.3vw]">4 ON BOARD</strong>
+      </div>
+    </section>
+
+
+    <!-- TILE D: CAMERA PREVIEW (Bottom-center, 1 col, 1 row) -->
+    <section class="bento-card p-[1.8vw] flex flex-col justify-between">
+      <!-- Panel Header: >= 3% screen height -->
+      <div class="flex items-center justify-between pb-[1vh] border-b border-[var(--border)]">
+        <div class="flex items-center gap-[0.7vw]">
+          <span class="text-[1.35vw] font-black tracking-wider uppercase text-[var(--text)]">
+            CAMERA
+          </span>
+          <span class="text-[1vw] font-bold text-[var(--muted)]">
+            DOORWAY FOV-1
+          </span>
+        </div>
+        <div class="flex items-center gap-[0.5vw] px-[0.9vw] py-[0.4vh] rounded-md bg-emerald-500/20 border border-emerald-500/50">
+          <span class="w-[0.6vw] h-[0.6vw] rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-emerald-400 text-[0.95vw] font-extrabold tracking-widest uppercase">
+            LIVE (CAMERA)
+          </span>
+        </div>
+      </div>
+
+      <!-- 16:9 Viewport Area for Computer Vision Doorway Stream -->
+      <div class="relative w-full aspect-video bg-black rounded-xl overflow-hidden border-[0.16vw] border-[#2d3a5e] flex items-center justify-center my-auto shadow-inner">
+        <!-- Camera HUD Grid Overlay -->
+        <div class="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:1.2vw_1.2vw] opacity-40"></div>
+
+        <!-- Telemetry Header -->
+        <div class="absolute top-[0.6vh] left-[0.8vw] right-[0.8vw] flex justify-between text-[0.85vw] font-mono text-emerald-400 font-bold opacity-80">
+          <span>CAM_01 · DOORWAY_ENTRY</span>
+          <span>30 FPS · 1080P</span>
+        </div>
+
+        <!-- YOLO Computer Vision Person Detection Reticle -->
+        <div class="relative w-[34%] h-[68%] border-[0.2vw] border-emerald-400 rounded-lg flex flex-col justify-between p-[0.4vw] cv-box shadow-[0_0_1.5vw_rgba(52,211,153,0.3)]">
+          <div class="bg-emerald-500 text-black font-black text-[0.75vw] px-[0.4vw] py-[0.15vh] rounded self-start tracking-wider">
+            PERSON 98.4%
+          </div>
+
+          <!-- Stylized Human Figure Reticle Wireframe -->
+          <div class="mx-auto my-auto flex flex-col items-center opacity-85">
+            <div class="w-[1.6vw] h-[1.6vw] rounded-full border-[0.2vw] border-emerald-400"></div>
+            <div class="w-[3.4vw] h-[2vw] border-t-[0.2vw] border-x-[0.2vw] border-emerald-400 rounded-t-full mt-[0.3vh]"></div>
+          </div>
+
+          <div class="text-[0.7vw] font-mono text-emerald-400 text-right font-bold">
+            TRK_ID: #4092
+          </div>
+        </div>
+
+        <!-- Telemetry Footer inside Camera Feed -->
+        <div class="absolute bottom-[0.6vh] left-[0.8vw] right-[0.8vw] flex justify-between text-[0.8vw] font-mono text-slate-400">
+          <span>ALGO: YOLOv8-NANO</span>
+          <span class="text-emerald-400">STATUS: INFERENCE ACTIVE</span>
+        </div>
+      </div>
+
+      <!-- Camera Diagnostics Metrics -->
+      <div class="flex items-center justify-between pt-[1vh] border-t border-[var(--border)] text-[1.05vw] font-bold text-[var(--muted)]">
+        <div>MODEL LATENCY: <strong class="text-[var(--text)] font-extrabold text-[1.15vw]">14ms</strong></div>
+        <div>DETECTION ACCURACY: <strong class="text-emerald-400 font-extrabold text-[1.15vw]">98.2%</strong></div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- BOTTOM BAR: Approx 6% of screen height -->
+  <footer class="w-full h-[6vh] flex items-center justify-between px-[1.8vw] py-[0.5vh] bento-card mt-[1.2vh] shrink-0">
+    <!-- Left: Origin Badges -->
+    <div class="flex items-center gap-[1.2vw]">
+      <!-- LIVE counts pill -->
+      <div class="flex items-center gap-[0.6vw] px-[1vw] py-[0.4vh] rounded-full bg-emerald-500/20 border border-emerald-500/50">
+        <span class="w-[0.65vw] h-[0.65vw] rounded-full bg-emerald-400"></span>
+        <span class="text-[1vw] font-black tracking-wider text-emerald-400 uppercase">
+          LIVE — CAMERA COUNTS
+        </span>
+      </div>
+
+      <!-- SIMULATED bus position pill -->
+      <div class="flex items-center gap-[0.6vw] px-[1vw] py-[0.4vh] rounded-full bg-amber-500/20 border border-amber-500/50">
+        <span class="w-[0.65vw] h-[0.65vw] rounded-full bg-amber-400"></span>
+        <span class="text-[1vw] font-black tracking-wider text-amber-400 uppercase">
+          SIMULATED — BUS POSITION, ETA, NEXT STOP
+        </span>
+      </div>
+    </div>
+
+    <!-- Right: Manual Override Indicator -->
+    <div class="flex items-center gap-[0.8vw]">
+      <span class="w-[0.6vw] h-[0.6vw] rounded-full bg-slate-600"></span>
+      <span class="text-[1.05vw] font-black text-amber-500/70 uppercase tracking-widest">
+        MANUAL OVERRIDE: OFF
+      </span>
+    </div>
+  </footer>
+
+  <!-- TOUCH-SAFETY EXPLICIT REQUIREMENT:
+       Single invisible 80x80px hotspot in the exact bottom-right corner for hidden 5-finger emergency unlock.
+       No other elements have clickable or tap triggers. -->
+  <div id="emergency-unlock-hotspot" class="fixed bottom-0 right-0 w-[80px] h-[80px] opacity-0 pointer-events-auto z-50" aria-hidden="true" title="System Unlock Hotspot"></div>
+
+</body>
+</html>

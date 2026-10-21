@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500;600;700&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;overflow:hidden;height:100vh;width:100vw;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "surface-bright": "#34394a", "on-tertiary-container": "#3e2400", "error-container": "#93000a", "on-secondary-container": "#d6a9ff", "surface-container-low": "#161b2b", "primary": "#adc6ff", "on-error-container": "#ffdad6", "surface-container-lowest": "#080d1d", "primary-fixed-dim": "#adc6ff", "on-error": "#690005", "surface-container-high": "#25293a", "on-tertiary-fixed": "#2a1700", "secondary-container": "#6f00be", "on-primary": "#002e6a", "on-secondary-fixed": "#2c0051", "surface-dim": "#0e1323", "outline": "#8c909f", "on-background": "#dee1f9", "secondary-fixed-dim": "#ddb7ff", "surface-container-highest": "#2f3446", "on-surface-variant": "#c2c6d6", "secondary": "#ddb7ff", "inverse-on-surface": "#2b3041", "on-tertiary-fixed-variant": "#653e00", "surface": "#0e1323", "on-secondary": "#490080", "tertiary-container": "#ca8100", "on-secondary-fixed-variant": "#6900b3", "background": "#0e1323", "tertiary": "#ffb95f", "tertiary-fixed-dim": "#ffb95f", "on-tertiary": "#472a00", "surface-container": "#1a1f30", "surface-tint": "#adc6ff", "on-primary-fixed-variant": "#004395", "on-surface": "#dee1f9", "primary-container": "#4d8eff", "error": "#ffb4ab", "secondary-fixed": "#f0dbff", "primary-fixed": "#d8e2ff", "outline-variant": "#424754", "inverse-primary": "#005ac2", "on-primary-fixed": "#001a42", "on-primary-container": "#00285d", "inverse-surface": "#dee1f9", "tertiary-fixed": "#ffddb8", "surface-variant": "#2f3446" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "gutter-sm": "0.75rem", "margin": "1rem", "space-xs": "0.25rem", "margin-lg": "1.5rem", "space-sm": "0.5rem", "gutter-lg": "1.25rem", "space-xl": "1.5rem", "space-md": "0.75rem", "margin-sm": "0.75rem", "space-lg": "1rem", "gutter": "1rem" }, "fontFamily": { "body-lg": [ "Inter" ], "telemetry-numeral-md": [ "JetBrains Mono" ], "body-md": [ "Inter" ], "telemetry-numeral-lg": [ "JetBrains Mono" ], "headline-xl": [ "Space Grotesk" ], "headline-lg": [ "Space Grotesk" ], "label-sm": [ "JetBrains Mono" ], "headline-sm": [ "Space Grotesk" ], "label-lg": [ "JetBrains Mono" ], "headline-md": [ "Space Grotesk" ], "label-md": [ "JetBrains Mono" ], "body-sm": [ "Inter" ] }, "fontSize": { "body-lg": [ "16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" } ], "telemetry-numeral-md": [ "20px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" } ], "body-md": [ "14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" } ], "telemetry-numeral-lg": [ "28px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "700" } ], "headline-xl": [ "32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" } ], "headline-lg": [ "24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600" } ], "label-sm": [ "10px", { "lineHeight": "12px", "letterSpacing": "0.06em", "fontWeight": "600" } ], "headline-sm": [ "16px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "600" } ], "label-lg": [ "14px", { "lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "500" } ], "headline-md": [ "20px", { "lineHeight": "26px", "letterSpacing": "-0.01em", "fontWeight": "600" } ], "label-md": [ "12px", { "lineHeight": "16px", "letterSpacing": "0.03em", "fontWeight": "500" } ], "body-sm": [ "12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "400" } ] } } } };</script></head><body class="bg-surface-container-lowest text-on-surface font-body-md text-body-md h-screen w-screen overflow-hidden flex flex-col select-none"><header class="h-[102px] min-h-[64px] max-h-[72px] w-full bg-surface-container border-b border-outline-variant px-margin-lg flex items-center justify-between z-50 shrink-0"><div class="flex items-center gap-space-lg"><div class="flex flex-col"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-primary text-headline-md">directions_bus</span><span class="font-headline-md text-headline-md font-bold tracking-tight text-on-surface">SmartBus TN</span><span class="px-space-xs py-0.5 bg-primary/10 border border-primary text-primary font-label-sm text-label-sm rounded uppercase">ADMIN</span></div><span class="font-body-sm text-body-sm text-on-surface-variant">Operator controls · same backend as public dashboard</span></div><nav class="hidden xl:flex items-center gap-space-xs ml-margin-lg" data-active-classes="bg-surface-container-highest text-primary font-bold"><a aria-current="page" class="px-space-md py-space-xs rounded transition-colors bg-surface-container-highest text-primary font-bold" data-path="live-control-deck" href="#">LIVE DECK</a><a class="px-space-md py-space-xs rounded font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="fleet-telematics" href="#">TELEMATICS</a><a class="px-space-md py-space-xs rounded font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="simulation-log" href="#">LOG ENGINE</a></nav></div><div class="flex items-center bg-surface-container-lowest p-space-xs rounded border border-outline-variant"><button class="px-space-md py-1 rounded bg-primary text-on-primary font-label-md text-label-md font-semibold transition-all shadow-sm" type="button">AI DRIVEN</button><button class="px-space-md py-1 rounded text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-all" type="button">MANUAL</button><button class="px-space-md py-1 rounded text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-all" type="button">PAUSED</button></div><div class="flex items-center gap-space-lg"><div class="flex items-center gap-space-xs px-space-md py-1 bg-surface-container-low rounded-full border border-primary/30"><div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div><span class="font-label-sm text-label-sm font-semibold tracking-wider text-primary">CONNECTED</span></div><button class="w-9 h-9 rounded bg-surface-container-high hover:bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-on-surface border border-outline-variant" title="Toggle Theme" type="button"><span class="material-symbols-outlined text-headline-sm">dark_mode</span></button><a class="flex items-center gap-space-xs px-space-md py-2 bg-surface-bright hover:bg-surface-container-highest text-on-surface rounded border border-outline-variant font-label-md text-label-md font-medium transition-colors" data-path="exit-public" href="#"><span>Exit to Public</span><span class="material-symbols-outlined text-label-lg">arrow_forward</span></a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="flex-1 w-full h-[860px] bg-surface-container-lowest overflow-hidden"><div class="flex flex-col w-full h-full overflow-hidden select-none bg-[#0b1020] text-[#e8ecf8]">
+<!-- TOP SUB-HEADER BAR (Strict Height 44px) -->
+<div class="h-[44px] shrink-0 bg-[#141b31] border-b border-[#24304f] px-6 flex items-center justify-between z-10">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#10b981] animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-[#10b981] tracking-widest uppercase">DISPATCH TELEMETRY BRIDGE</span>
+</div>
+<span class="text-[#24304f]">|</span>
+<div class="flex items-center gap-2 font-label-md text-label-md text-[#93a0c0]">
+<span>UNIT:</span>
+<span class="text-[#e8ecf8] font-telemetry-numeral-md font-semibold">TN-EXPR-4089</span>
+</div>
+<span class="text-[#24304f]">|</span>
+<div class="flex items-center gap-2 font-label-md text-label-md text-[#93a0c0]">
+<span>ROUTE:</span>
+<span class="text-[#adc6ff] font-semibold">LINE 14 (DOWNTOWN EXPRESS)</span>
+</div>
+</div>
+<!-- Mode Select Segmented Tabs -->
+<div class="flex items-center bg-[#0b1020] p-1 rounded-xl border border-[#24304f]">
+<button class="flex items-center gap-1.5 px-4 py-1 rounded-lg text-label-md font-label-md font-semibold bg-[#f59e0b] text-[#080d1d] shadow-sm transition-all" id="btn-mode-ai" type="button">
+<span class="material-symbols-outlined text-sm">smart_toy</span>
+<span>AI DRIVEN</span>
+</button>
+<button class="flex items-center gap-1.5 px-4 py-1 rounded-lg text-label-md font-label-md font-semibold text-[#93a0c0] hover:text-[#e8ecf8] transition-all" id="btn-mode-manual" type="button">
+<span class="material-symbols-outlined text-sm">front_hand</span>
+<span>MANUAL</span>
+</button>
+<button class="flex items-center gap-1.5 px-4 py-1 rounded-lg text-label-md font-label-md font-semibold text-[#93a0c0] hover:text-[#e8ecf8] transition-all" id="btn-mode-paused" type="button">
+<span class="material-symbols-outlined text-sm">pause_circle</span>
+<span>PAUSED</span>
+</button>
+</div>
+<div class="flex items-center gap-4 font-label-sm text-label-sm text-[#93a0c0]">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base text-[#10b981]">sensors</span>
+<span>OPTICAL FLOW: NOMINAL</span>
+</div>
+<div class="flex items-center gap-1.5 bg-[#0b1020] px-2.5 py-1 rounded border border-[#24304f]">
+<span class="text-[#f59e0b] font-telemetry-numeral-md">YOLOv8x-BUS-v3.1</span>
+</div>
+</div>
+</div>
+<!-- MAIN OPERATIONAL STAGE: 3 FIXED COLUMNS (calc(100% - 88px)) -->
+<div class="flex-1 w-full p-4 grid grid-cols-12 gap-4 overflow-hidden min-h-0">
+<!-- ==========================================
+         COLUMN 1: LIVE AI TELEMETRY (~28% -> col-span-3 or col-span-3.5)
+         ========================================== -->
+<div class="col-span-3 h-full flex flex-col bg-[#141b31] border border-[#24304f] rounded-2xl p-4 overflow-hidden shadow-xl">
+<!-- Section Title -->
+<div class="flex items-center justify-between pb-3 border-b border-[#24304f] shrink-0">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#10b981] animate-ping"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-[#10b981] -ml-4.5"></span>
+<h2 class="font-headline-sm text-headline-sm text-[#e8ecf8] tracking-wider uppercase font-semibold">LIVE AI TELEMETRY</h2>
+</div>
+<span class="px-2 py-0.5 rounded font-label-sm text-label-sm bg-[#10b981]/15 text-[#10b981] border border-[#10b981]/40 uppercase tracking-wider">ACTIVE</span>
+</div>
+<!-- 16:9 Synthetic Camera Feed Surface -->
+<div class="mt-3 relative w-full aspect-video rounded-xl overflow-hidden bg-[#080d1d] border border-[#24304f] shrink-0 flex items-center justify-center">
+<!-- Grid Reticle & Camera Pattern -->
+<div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(#3b82f6 1px, transparent 1px); background-size: 16px 16px;"></div>
+<!-- Live Camera Corner Overlay -->
+<div class="absolute top-2.5 left-2.5 z-20 flex items-center gap-2">
+<div class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#10b981]/90 text-[#080d1d] font-label-sm text-label-sm font-bold shadow-md">
+<span class="w-1.5 h-1.5 rounded-full bg-[#080d1d] animate-pulse"></span>
+<span>LIVE (camera)</span>
+</div>
+<span class="font-label-sm text-label-sm text-[#93a0c0] bg-[#0b1020]/80 px-2 py-0.5 rounded border border-[#24304f]">CAM_01</span>
+</div>
+<div class="absolute top-2.5 right-2.5 z-20 font-label-sm text-label-sm text-[#93a0c0] bg-[#0b1020]/80 px-2 py-0.5 rounded border border-[#24304f] flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-[#ef4444] animate-pulse"></span>
+<span>REC</span>
+</div>
+<!-- Simulated Passenger Silhouette & Computer Vision Bounding Box -->
+<div class="relative w-full h-full flex items-center justify-center">
+<!-- Doorway frame guide -->
+<div class="absolute inset-y-3 inset-x-8 border border-dashed border-[#3d5084]/60 rounded pointer-events-none"></div>
+<!-- Bounding box (YOLOv8 target) -->
+<div class="absolute w-[46%] h-[74%] border-2 border-[#10b981] bg-[#10b981]/10 rounded shadow-[0_0_15px_rgba(16,185,129,0.3)] flex flex-col justify-between p-1.5">
+<div class="flex items-center justify-between">
+<span class="bg-[#10b981] text-[#080d1d] font-label-sm text-label-sm px-1.5 py-0.2 rounded font-bold tracking-tight">PERSON 98.4%</span>
+<span class="text-[#10b981] font-label-sm text-label-sm font-bold">ID:07</span>
+</div>
+<!-- Vector representation of passenger entering -->
+<div class="w-full flex justify-center opacity-85">
+<svg class="w-24 h-24 text-[#adc6ff]" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 4a3 3 0 100 6 3 3 0 000-6zm-7 14v1a1 1 0 001 1h12a1 1 0 001-1v-1c0-2.66-5.33-4-7-4s-7 1.34-7 4z"></path>
+</svg>
+</div>
+<!-- Motion vector arrow -->
+<div class="flex items-center justify-between text-[#10b981] font-label-sm text-label-sm bg-[#080d1d]/85 px-1.5 py-0.5 rounded">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+<span>ENTRY VECTOR</span>
+</span>
+<span>+1 BOARD</span>
+</div>
+</div>
+</div>
+<!-- Camera Technical Footer Bar -->
+<div class="absolute bottom-0 inset-x-0 bg-[#080d1d]/90 border-t border-[#24304f] px-3 py-1 flex items-center justify-between font-label-sm text-label-sm text-[#93a0c0]">
+<span>DOORWAY_ENTRY · SENSOR_REAR</span>
+<span class="font-telemetry-numeral-md text-[#e8ecf8]">1080P @ 30FPS</span>
+</div>
+</div>
+<!-- Telemetry Data Rows Grid (4 Rows) -->
+<div class="mt-4 flex-1 flex flex-col justify-around gap-2 bg-[#0b1020] rounded-xl p-3 border border-[#24304f]">
+<!-- Row 1: FPS -->
+<div class="flex items-center justify-between px-3 py-2 rounded-lg bg-[#141b31] border border-[#24304f]/70">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-base text-[#93a0c0]">speed</span>
+<span class="font-label-md text-label-md text-[#93a0c0] uppercase tracking-wider">AI Pipeline FPS</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="font-telemetry-numeral-lg text-telemetry-numeral-lg text-[#10b981] font-bold" id="metric-fps">30.2</span>
+<span class="font-label-sm text-label-sm text-[#93a0c0]">fps</span>
+</div>
+</div>
+<!-- Row 2: Active Tracks -->
+<div class="flex items-center justify-between px-3 py-2 rounded-lg bg-[#141b31] border border-[#24304f]/70">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-base text-[#93a0c0]">track_changes</span>
+<span class="font-label-md text-label-md text-[#93a0c0] uppercase tracking-wider">Active Tracks</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="font-telemetry-numeral-lg text-telemetry-numeral-lg text-[#38bdf8] font-bold">01</span>
+<span class="font-label-sm text-label-sm text-[#93a0c0]">unit</span>
+</div>
+</div>
+<!-- Row 3: Last Message Latency -->
+<div class="flex items-center justify-between px-3 py-2 rounded-lg bg-[#141b31] border border-[#24304f]/70">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-base text-[#93a0c0]">network_ping</span>
+<span class="font-label-md text-label-md text-[#93a0c0] uppercase tracking-wider">Last Message</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="font-telemetry-numeral-lg text-telemetry-numeral-lg text-[#dee1f9] font-bold" id="metric-latency">14</span>
+<span class="font-label-sm text-label-sm text-[#93a0c0]">ms ago</span>
+</div>
+</div>
+<!-- Row 4: Camera Hardware Status -->
+<div class="flex items-center justify-between px-3 py-2 rounded-lg bg-[#141b31] border border-[#24304f]/70">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-base text-[#93a0c0]">videocam</span>
+<span class="font-label-md text-label-md text-[#93a0c0] uppercase tracking-wider">Camera Status</span>
+</div>
+<span class="px-2.5 py-1 rounded-md font-label-md text-label-md bg-[#10b981]/15 text-[#10b981] border border-[#10b981]/50 font-bold uppercase tracking-wide">
+            STREAMING
+          </span>
+</div>
+</div>
+<!-- Bottom Warning Caution Strip -->
+<div class="mt-3 shrink-0 flex items-start gap-2.5 bg-[#f59e0b]/10 border border-[#f59e0b]/40 rounded-xl p-3">
+<span class="material-symbols-outlined text-[#f59e0b] text-xl shrink-0 mt-0.5">warning</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm font-bold text-[#f59e0b] uppercase tracking-wide">HARDWARE FAILOVER PROTOCOL</span>
+<p class="font-body-sm text-body-sm text-[#e8ecf8]/80 leading-tight">If camera status drops or drops below 15 FPS, instantly switch to <span class="text-[#f59e0b] font-semibold">MANUAL</span> mode.</p>
+</div>
+</div>
+</div>
+<!-- ==========================================
+         COLUMN 2: MANUAL CONTROLS (~42% -> col-span-5)
+         ========================================== -->
+<div class="col-span-5 h-full flex flex-col bg-[#141b31] border border-[#24304f] rounded-2xl p-4 overflow-hidden shadow-xl justify-between">
+<!-- Top Occupancy Status Header -->
+<div class="shrink-0 bg-[#0b1020] border border-[#24304f] rounded-2xl p-4 flex flex-col items-center justify-center relative overflow-hidden">
+<!-- Ambient Radial Glow behind number -->
+<div class="absolute -top-12 inset-x-0 h-32 bg-[#3b82f6]/10 blur-2xl pointer-events-none"></div>
+<div class="w-full flex items-center justify-between mb-1">
+<div class="flex items-center gap-1.5 text-[#f59e0b] font-label-sm text-label-sm uppercase tracking-widest font-bold">
+<span class="material-symbols-outlined text-base">warning</span>
+<span>MANUAL OVERRIDE INTERFACE</span>
+</div>
+<span class="font-label-sm text-label-sm text-[#93a0c0] uppercase tracking-wider">MAX RATED: 10 PAX</span>
+</div>
+<!-- Huge Occupancy Readout -->
+<div class="flex items-baseline justify-center gap-3 my-1">
+<span class="font-label-md text-label-md text-[#93a0c0] uppercase tracking-wider font-semibold">OCCUPANCY:</span>
+<span class="font-telemetry-numeral-lg text-[68px] leading-none font-bold text-[#e8ecf8] tracking-tighter tabular-nums drop-shadow-md" id="occupancy-display">
+            4 <span class="text-[#3d5084] text-[48px] font-normal">/</span> 10
+          </span>
+</div>
+<!-- Sub-indicator Badge & Progress Bar -->
+<div class="w-full max-w-md mt-2 flex flex-col gap-1.5 items-center">
+<div class="w-full h-2.5 bg-[#141b31] rounded-full overflow-hidden border border-[#24304f]">
+<div class="h-full bg-gradient-to-r from-[#10b981] via-[#3b82f6] to-[#a855f7] rounded-full transition-all duration-300" id="occupancy-bar" style="width: 40%;"></div>
+</div>
+<div class="flex items-center justify-between w-full font-label-sm text-label-sm px-1">
+<span class="text-[#10b981] font-bold tracking-wider uppercase" id="capacity-badge">40% CAPACITY · GREEN STATUS</span>
+<span class="text-[#93a0c0]">SEATS REMAINING: <strong class="text-[#e8ecf8]" id="seats-remaining">6</strong></span>
+</div>
+</div>
+</div>
+<!-- Primary Action Area: 2 Huge Square Touch Targets (side-by-side) -->
+<div class="grid grid-cols-2 gap-4 my-2 shrink-0">
+<!-- + BOARD BUTTON -->
+<button class="group relative h-[210px] rounded-2xl bg-gradient-to-b from-[#2563eb] to-[#1d4ed8] border-2 border-[#60a5fa] hover:border-[#93c5fd] active:scale-[0.98] transition-all shadow-[0_0_24px_rgba(37,99,235,0.35)] flex flex-col items-center justify-center p-4 cursor-pointer overflow-hidden" id="btn-board" type="button">
+<div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+<div class="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-inner">
+<svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" viewbox="0 0 24 24">
+<path d="M12 19V5M5 12l7-7 7 7"></path>
+</svg>
+</div>
+<span class="font-headline-lg text-headline-lg font-bold text-white tracking-wide uppercase">+ BOARD</span>
+<span class="mt-1 font-label-sm text-label-sm text-white/80 uppercase tracking-widest font-semibold">INCREMENT OCCUPANCY</span>
+</button>
+<!-- + ALIGHT BUTTON -->
+<button class="group relative h-[210px] rounded-2xl bg-gradient-to-b from-[#7c3aed] to-[#6d28d9] border-2 border-[#a855f7] hover:border-[#c084fc] active:scale-[0.98] transition-all shadow-[0_0_24px_rgba(124,58,237,0.35)] flex flex-col items-center justify-center p-4 cursor-pointer overflow-hidden" id="btn-alight" type="button">
+<div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+<div class="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-inner">
+<svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" viewbox="0 0 24 24">
+<path d="M12 5v14M19 12l-7 7-7-7"></path>
+</svg>
+</div>
+<span class="font-headline-lg text-headline-lg font-bold text-white tracking-wide uppercase">+ ALIGHT</span>
+<span class="mt-1 font-label-sm text-label-sm text-white/80 uppercase tracking-widest font-semibold">DECREMENT OCCUPANCY</span>
+</button>
+</div>
+<!-- Secondary Action Row: Undo Last & Reset to 0 (min 56px height) -->
+<div class="grid grid-cols-2 gap-4 shrink-0">
+<!-- Undo Last -->
+<button class="h-14 rounded-xl bg-[#1e293b] hover:bg-[#334155] border border-[#334155] active:bg-[#0f172a] text-[#e8ecf8] font-headline-sm text-headline-sm font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer shadow" id="btn-undo" type="button">
+<span class="material-symbols-outlined text-xl text-[#93a0c0]">undo</span>
+<span>− Undo last</span>
+</button>
+<!-- Reset to 0 -->
+<button class="group relative h-14 rounded-xl bg-[#7f1d1d] hover:bg-[#991b1b] border border-[#dc2626] active:bg-[#450a0a] text-red-200 font-headline-sm text-headline-sm font-bold flex flex-col items-center justify-center transition-colors cursor-pointer shadow" id="btn-reset" type="button">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-xl text-red-200">restart_alt</span>
+<span class="tracking-wide">RESET to 0</span>
+</div>
+<span class="font-label-sm text-[10px] text-red-300/80 -mt-0.5 tracking-tight uppercase">HOLD 2 SECONDS TO CLEAR</span>
+</button>
+</div>
+<!-- Quick Set Strip Target -->
+<div class="shrink-0 bg-[#0b1020] border border-[#24304f] rounded-xl p-3 flex flex-col gap-2">
+<div class="flex items-center justify-between font-label-sm text-label-sm text-[#93a0c0]">
+<span class="uppercase tracking-wider font-semibold">QUICK SET TARGET PRESETS</span>
+<span class="text-[#f59e0b]">INSTANT OVERWRITE</span>
+</div>
+<div class="grid grid-cols-4 gap-2.5">
+<button class="btn-preset h-12 rounded-xl border border-[#24304f] bg-[#1a223a] hover:bg-[#f59e0b]/20 hover:border-[#f59e0b] text-[#e8ecf8] font-telemetry-numeral-lg text-telemetry-numeral-lg font-bold flex items-center justify-center transition-all cursor-pointer" data-target="0" type="button">
+            0
+          </button>
+<button class="btn-preset h-12 rounded-xl border border-[#24304f] bg-[#1a223a] hover:bg-[#f59e0b]/20 hover:border-[#f59e0b] text-[#e8ecf8] font-telemetry-numeral-lg text-telemetry-numeral-lg font-bold flex items-center justify-center transition-all cursor-pointer" data-target="5" type="button">
+            5
+          </button>
+<button class="btn-preset h-12 rounded-xl border border-[#24304f] bg-[#1a223a] hover:bg-[#f59e0b]/20 hover:border-[#f59e0b] text-[#e8ecf8] font-telemetry-numeral-lg text-telemetry-numeral-lg font-bold flex items-center justify-center transition-all cursor-pointer" data-target="8" type="button">
+            8
+          </button>
+<button class="btn-preset h-12 rounded-xl border border-[#24304f] bg-[#1a223a] hover:bg-[#f59e0b]/20 hover:border-[#f59e0b] text-[#e8ecf8] font-telemetry-numeral-lg text-telemetry-numeral-lg font-bold flex items-center justify-center transition-all cursor-pointer" data-target="10" type="button">
+            10
+          </button>
+</div>
+</div>
+</div>
+<!-- ==========================================
+         COLUMN 3: EVENT LOG (LAST 20) (~30% -> col-span-4)
+         ========================================== -->
+<div class="col-span-4 h-full flex flex-col bg-[#141b31] border border-[#24304f] rounded-2xl p-4 overflow-hidden shadow-xl">
+<!-- Header with sync & badge -->
+<div class="flex items-center justify-between pb-3 border-b border-[#24304f] shrink-0">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-base text-[#38bdf8]">receipt_long</span>
+<h2 class="font-headline-sm text-headline-sm text-[#e8ecf8] uppercase tracking-wider font-semibold">EVENT LOG — LAST 20</h2>
+</div>
+<div class="flex items-center gap-2">
+<div class="flex items-center gap-1.5 px-2 py-0.5 rounded font-label-sm text-label-sm bg-[#38bdf8]/15 text-[#38bdf8] border border-[#38bdf8]/40">
+<span class="w-1.5 h-1.5 rounded-full bg-[#38bdf8] animate-pulse"></span>
+<span>AUDIT SYNC</span>
+</div>
+<span class="font-label-sm text-label-sm text-[#93a0c0] font-telemetry-numeral-md">20 ENTRIES</span>
+</div>
+</div>
+<!-- Dot Legend Bar -->
+<div class="shrink-0 flex items-center justify-between px-2 py-1.5 mt-2 bg-[#0b1020] rounded-lg border border-[#24304f] font-label-sm text-[10px] text-[#93a0c0]">
+<div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#3b82f6]"></span><span>AI Board</span></div>
+<div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#a855f7]"></span><span>AI Alight</span></div>
+<div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#f59e0b]"></span><span>Man Board</span></div>
+<div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#ea580c]"></span><span>Man Alight</span></div>
+<div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#ef4444]"></span><span>Mode/Reset</span></div>
+</div>
+<!-- Exactly 20 Non-scrolling compressed tabular rows (Calculated height) -->
+<div class="mt-2 flex-1 flex flex-col justify-between overflow-hidden bg-[#080d1d] rounded-xl border border-[#24304f] p-1 font-label-sm text-[11px] leading-tight" id="log-container">
+<!-- Row 1 (Latest, highlighted with glow) -->
+<div class="h-[21px] flex items-center justify-between px-2 rounded bg-[#3b82f6]/20 border border-[#3b82f6]/50 shadow-[0_0_8px_rgba(59,130,246,0.3)]">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-2 h-2 rounded-full bg-[#3b82f6] shrink-0 animate-ping"></span>
+<span class="text-[#adc6ff] font-telemetry-numeral-md font-bold">14:03:22</span>
+<span class="text-[#e8ecf8] font-semibold truncate">AI BOARD</span>
+<span class="text-[#93a0c0]">ID 7</span>
+</div>
+<span class="font-telemetry-numeral-md font-bold text-[#38bdf8] shrink-0">occ 5</span>
+</div>
+<!-- Row 2 -->
+<div class="h-[21px] flex items-center justify-between px-2 rounded bg-[#f59e0b]/15 border border-[#f59e0b]/30">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-2 h-2 rounded-full bg-[#f59e0b] shrink-0"></span>
+<span class="text-[#f59e0b] font-telemetry-numeral-md">14:03:05</span>
+<span class="text-[#f59e0b] font-semibold truncate">MANUAL BOARD</span>
+<span class="text-[#93a0c0]">OPERATOR</span>
+</div>
+<span class="font-telemetry-numeral-md font-bold text-[#e8ecf8] shrink-0">occ 4</span>
+</div>
+<!-- Row 3 -->
+<div class="h-[21px] flex items-center justify-between px-2 rounded hover:bg-[#141b31]">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-2 h-2 rounded-full bg-[#a855f7] shrink-0"></span>
+<span class="text-[#93a0c0] font-telemetry-numeral-md">14:02:48</span>
+<span class="text-[#ddb7ff] font-medium truncate">AI ALIGHT</span>
+<span class="text-[#93a0c0]">ID 6</span>
+</div>
+<span class="font-telemetry-numeral-md text-[#93a0c0] shrink-0">occ 3</span>
+</div>
+<!-- Row 4 -->
+<div class="h-[21px] flex items-center justify-between px-2 rounded hover:bg-[#141b31]">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-2 h-2 rounded-full bg-[#3b82f6] shrink-0"></span>
+<span class="text-[#93a0c0] font-telemetry-numeral-md">14:01:19</span>
+<span class="text-[#adc6ff] font-medium truncate">AI BOARD</span>
+<span class="text-[#93a0c0]">ID 5</span>
+</div>
+<span class="font-telemetry-numeral-md text-[#93a0c0] shrink-0">occ 4</span>
+</div>
+<!-- Row 5 -->
+<div class="h-[21px] flex items-center justify-between px-2 rounded hover:bg-[#141b31]">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-2 h-2 rounded-full bg-[#3b82f6] shrink-0"></span>
+<span class="text-[#93a0c0] font-telemetry-numeral-md">14:00:52</span>
+<span class="text-[#adc6ff] font-medium truncate">AI BOARD</span>
+<span class="text-[#93a0c0]">ID 4</span>
+</div>
+<span class="font-telemetry-numeral-md text-[#93a0c0] shrink-0">occ 3</span>
+</div>
+<!-- Row 6 -->
+<div class="h-[21px] flex items-center justify-between px-2 rounded hover:bg-[#141b31]">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-2 h-2 rounded-full bg-[#ea580c] shrink-0"></span>
+<span class="text-[#93a0c0] font-telemetry-numeral-md">13:59:10</span>
+<span class="text-[#ea580c] font-medium truncate">MANUAL ALIGHT</span>
+<span class="text-[#93a0c0]">OPERATOR</span>
+</div>
+<span class="font-telemetry-numeral-md text-[#93a0c0] shrink-0">occ 2</span>
+</div>
+<!-- Row 7 -->
+<div class="h-[21px] flex items-center justify-between px-2 rounded hover:bg-[#141b31]">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-2 h-2 rounded-full bg-[#3b82f6] shrink-0"></span>
+<span class="text-[#93a0c0] font-telemetry-numeral-md">13:58:30</span>
+<span class="text-[#adc6ff] font-medium truncate">AI BOARD</span>
+<span class="text-[#93a0c0]">ID 3</span>
+</div>
+<span class="font-telemetry-numeral-md text-[#93a0c0] shrink-0">occ 3</span>
+</div>
+<!-- Row 8 -->
+<div class="h-[21px] flex items-center justify-between px-2 rounded hover:bg-[#141b31]">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-2 h-2 rounded-full bg-[#ef4444] shrink-0"></span>
+<span class="text-[#93a0c0] font-telemetry-numeral-md">13:56:45</span>
+<span class="text-[#ffb4ab] font-medium truncate">MODE CHANGE</span>
+<span class="text-[#93a0c0]">AI → MANUAL</span>
+</div>
+<span class="font-telemetry-numeral-md text-[#93a0c0] shrink-0">occ 2</span>
+</div>
+<!-- Row 9 -->
+<div class="h-[21px] flex items-center justify-between px-2 rounded hover:bg-[#141b31]">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-2 h-2 rounded-full bg-[#ef4444] shrink-0"></span>
+<span class="text-[#93a0c0] font-telemetry-numeral-md">13:55:12</span>
+<span class="text-[#ffb4ab] font-medium truncate">MODE CHANGE</span>
+<span class="text-[#93a0c0]">MANUAL → AI</span>
+</div>
+<span class="font-telemetry-numeral-md text-[#93a0c0] shrink-0">occ 2</span>
+</div>
+<!-- Row 10 -->
+<div class="h-[21px] flex items-center justify-between px-2 rounded hover:bg-[#141b31]">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-2 h-2 rounded-full bg-[#3b82f6] shrink-0"></span>
+<span class="text-[#93a0c0] font-telemetry-numeral-md">13:54:02</span>
+<span class="text-[#adc6ff] font-medium truncate">AI BOARD</span>
+<span class="text-[#93a0c0]">ID 2</span>
+</div>
+<span class="font-telemetry-numeral-md text-[#93a0c0] shrink-0">occ 2</span>
+</div>
+<!-- Row 11 -->
+<div class="h-[21px] flex items-center justify-between px-2 rounded hover:bg-[#141b31]">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-2 h-2 rounded-full bg-[#3b82f6] shrink-0"></span>
+<span class="text-[#93a0c0] font-telemetry-numeral-md">13:52:40</span>
+<span class="text-[#adc6ff] font-medium truncate">AI BOARD</span>
+<span class="text-[#93a0c0]">ID 1</span>
+</div>
+<span class="font-telemetry-numeral-md text-[#93a0c0] shrink-0">occ 1</span>
+</div>
+<!-- Row 12 -->
+<div class="h-[21px] flex items-center justify-between px-2 rounded hover:bg-[#141b31]">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-2 h-2 rounded-full bg-[#10b981] shrink-0"></span>
+<span class="text-[#93a0c0] font-telemetry-numeral-md">13:50:00</span>
+<span class="text-[#10b981] font-medium truncate">SYSTEM INIT</span>
+<span class="text-[#93a0c0]">SENSORS OK</span>
+</div>
+<span class="font-telemetry-numeral-md text-[#10b981] shrink-0">occ 0</span>
+</div>
+<!-- Row 13 -->
+<div class="h-[21px] flex items-center justify-between px-2 rounded hover:bg-[#141b31]">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-2 h-2 rounded-full bg-[#10b981] shrink-0"></span>
+<span class="text-[#93a0c0] font-telemetry-numeral-md">13:49:15</span>
+<span class="text-[#93a0c0] font-medium truncate">CAMERA CALIB</span>
+<span class="text-[#93a0c0]">AUTO-EXPOSE OK</span>
+</div>
+<span class="font-telemetry-numeral-md text-[#93a0c0] shrink-0">occ 0</span>
+</div>
+<!-- Row 14 -->
+<div class="h-[21px] flex items-center justify-between px-2 rounded hover:bg-[#141b31]">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-2 h-2 rounded-full bg-[#10b981] shrink-0"></span>
+<span class="text-[#93a0c0] font-telemetry-numeral-md">13:48:02</span>
+<span class="text-[#93a0c0] font-medium truncate">WEIGHT SENSOR</span>
+<span class="text-[#93a0c0]">TARE ZEROED</span>
+</div>
+<span class="font-telemetry-numeral-md text-[#93a0c0] shrink-0">occ 0</span>
+</div>
+<!-- Row 15 -->
+<div class="h-[21px] flex items-center justify-between px-2 rounded hover:bg-[#141b31]">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-2 h-2 rounded-full bg-[#10b981] shrink-0"></span>
+<span class="text-[#93a0c0] font-telemetry-numeral-md">13:46:21</span>
+<span class="text-[#93a0c0] font-medium truncate">DOOR SENSOR</span>
+<span class="text-[#93a0c0]">ENCODER RE-HOMED</span>
+</div>
+<span class="font-telemetry-numeral-md text-[#93a0c0] shrink-0">occ 0</span>
+</div>
+<!-- Row 16 -->
+<div class="h-[21px] flex items-center justify-between px-2 rounded hover:bg-[#141b31]">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-2 h-2 rounded-full bg-[#10b981] shrink-0"></span>
+<span class="text-[#93a0c0] font-telemetry-numeral-md">13:45:00</span>
+<span class="text-[#93a0c0] font-medium truncate">TRIP START</span>
+<span class="text-[#93a0c0]">DEPOT TERMINAL</span>
+</div>
+<span class="font-telemetry-numeral-md text-[#93a0c0] shrink-0">occ 0</span>
+</div>
+<!-- Row 17 -->
+<div class="h-[21px] flex items-center justify-between px-2 rounded hover:bg-[#141b31]">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-2 h-2 rounded-full bg-[#10b981] shrink-0"></span>
+<span class="text-[#93a0c0] font-telemetry-numeral-md">13:42:33</span>
+<span class="text-[#93a0c0] font-medium truncate">GPS LOCK</span>
+<span class="text-[#93a0c0]">12 SATS · HDOP 0.8</span>
+</div>
+<span class="font-telemetry-numeral-md text-[#93a0c0] shrink-0">occ 0</span>
+</div>
+<!-- Row 18 -->
+<div class="h-[21px] flex items-center justify-between px-2 rounded hover:bg-[#141b31]">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-2 h-2 rounded-full bg-[#10b981] shrink-0"></span>
+<span class="text-[#93a0c0] font-telemetry-numeral-md">13:40:11</span>
+<span class="text-[#93a0c0] font-medium truncate">CANBUS SYNC</span>
+<span class="text-[#93a0c0]">J1939 BAUD 500k</span>
+</div>
+<span class="font-telemetry-numeral-md text-[#93a0c0] shrink-0">occ 0</span>
+</div>
+<!-- Row 19 -->
+<div class="h-[21px] flex items-center justify-between px-2 rounded hover:bg-[#141b31]">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-2 h-2 rounded-full bg-[#10b981] shrink-0"></span>
+<span class="text-[#93a0c0] font-telemetry-numeral-md">13:38:04</span>
+<span class="text-[#93a0c0] font-medium truncate">EDGE INFERENCE</span>
+<span class="text-[#93a0c0]">NVIDIA ORIN OK</span>
+</div>
+<span class="font-telemetry-numeral-md text-[#93a0c0] shrink-0">occ 0</span>
+</div>
+<!-- Row 20 (Oldest) -->
+<div class="h-[21px] flex items-center justify-between px-2 rounded bg-[#0b1020]/60 text-[#93a0c0]">
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-2 h-2 rounded-full bg-[#10b981] shrink-0"></span>
+<span class="font-telemetry-numeral-md">13:35:00</span>
+<span class="truncate">BOOT LOADER COMPLETE</span>
+<span>OS 2.4</span>
+</div>
+<span class="font-telemetry-numeral-md shrink-0">occ 0</span>
+</div>
+</div>
+</div>
+</div>
+<!-- BOTTOM HARDWARE ACTION RIBBON (Strict Height 44px) -->
+<div class="h-[44px] shrink-0 bg-[#141b31] border-t border-[#24304f] px-6 flex items-center justify-between z-10">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#3b82f6]/15 border border-[#3b82f6]/40 font-label-sm text-label-sm font-semibold text-[#adc6ff]">
+<span class="w-2 h-2 rounded-full bg-[#3b82f6]"></span>
+<span id="ribbon-mode">MODE: AI</span>
+</div>
+<div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#10b981]/15 border border-[#10b981]/40 font-label-sm text-label-sm font-semibold text-[#10b981]">
+<span class="material-symbols-outlined text-[14px]">videocam</span>
+<span>SOURCE: CAMERA</span>
+</div>
+<span class="text-[#24304f]">|</span>
+<div class="flex items-center gap-2 font-label-md text-label-md text-[#93a0c0]">
+<span>Accuracy test:</span>
+<span class="font-telemetry-numeral-md text-[#e8ecf8]">Run 0 / 30</span>
+</div>
+<button class="px-3 py-1 rounded-lg bg-[#2563eb] hover:bg-[#3b82f6] text-white font-label-md text-label-md font-semibold flex items-center gap-1 transition-colors cursor-pointer shadow" id="btn-start-test" type="button">
+<span class="material-symbols-outlined text-[16px]">play_arrow</span>
+<span>Start test</span>
+</button>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 font-label-sm text-label-sm text-[#93a0c0]">
+<span class="material-symbols-outlined text-base text-[#f59e0b]">lock</span>
+<span>PIN: hidden • press <kbd class="px-1.5 py-0.5 rounded bg-[#0b1020] border border-[#24304f] text-[#e8ecf8] font-mono">Esc</kbd> to lock console</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-[#10b981]"></span>
+<span class="font-label-sm text-label-sm text-[#10b981] font-semibold tracking-wider">HARNESS STANDBY</span>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    let currentOccupancy = 4;
+    const maxCapacity = 10;
+    let occupancyHistory = [4];
+    let currentMode = 'AI';
+
+    const occDisplay = document.getElementById('occupancy-display');
+    const occBar = document.getElementById('occupancy-bar');
+    const capBadge = document.getElementById('capacity-badge');
+    const seatsRemaining = document.getElementById('seats-remaining');
+    const logContainer = document.getElementById('log-container');
+    const ribbonMode = document.getElementById('ribbon-mode');
+
+    function updateOccupancy(newVal, reason = 'MANUAL') {
+      newVal = Math.max(0, Math.min(maxCapacity, newVal));
+      if (newVal === currentOccupancy && reason === 'MANUAL') return;
+
+      const prev = currentOccupancy;
+      currentOccupancy = newVal;
+      occupancyHistory.push(currentOccupancy);
+      if (occupancyHistory.length > 20) occupancyHistory.shift();
+
+      // Update occupancy typography
+      occDisplay.innerHTML = `${currentOccupancy} <span class="text-[#3d5084] text-[48px] font-normal">/</span> ${maxCapacity}`;
+
+      // Update progress bar
+      const pct = (currentOccupancy / maxCapacity) * 100;
+      occBar.style.width = `${pct}%`;
+
+      // Status color changes
+      const remaining = maxCapacity - currentOccupancy;
+      seatsRemaining.textContent = remaining;
+
+      if (currentOccupancy >= 9) {
+        capBadge.textContent = `${pct}% CAPACITY · CRITICAL LOAD`;
+        capBadge.className = 'text-[#ef4444] font-bold tracking-wider uppercase';
+      } else if (currentOccupancy >= 7) {
+        capBadge.textContent = `${pct}% CAPACITY · AMBER ELEVATED`;
+        capBadge.className = 'text-[#f59e0b] font-bold tracking-wider uppercase';
+      } else {
+        capBadge.textContent = `${pct}% CAPACITY · GREEN STATUS`;
+        capBadge.className = 'text-[#10b981] font-bold tracking-wider uppercase';
+      }
+
+      // Add to log
+      appendLog(currentOccupancy > prev ? 'MANUAL BOARD' : (currentOccupancy < prev ? 'MANUAL ALIGHT' : 'OCCUPANCY SET'), reason, currentOccupancy);
+    }
+
+    function appendLog(action, source, occ) {
+      const now = new Date();
+      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+      
+      let dotColor = '#f59e0b';
+      let titleColor = '#f59e0b';
+
+      if (action.includes('BOARD') && source === 'AI') {
+        dotColor = '#3b82f6';
+        titleColor = '#adc6ff';
+      } else if (action.includes('ALIGHT') && source === 'AI') {
+        dotColor = '#a855f7';
+        titleColor = '#ddb7ff';
+      } else if (action.includes('ALIGHT')) {
+        dotColor = '#ea580c';
+        titleColor = '#ea580c';
+      } else if (action.includes('RESET') || action.includes('MODE')) {
+        dotColor = '#ef4444';
+        titleColor = '#ffb4ab';
+      }
+
+      const row = document.createElement('div');
+      row.className = 'h-[21px] flex items-center justify-between px-2 rounded bg-[#3b82f6]/10 border border-[#3b82f6]/40 shadow-sm transition-all';
+      row.innerHTML = `
+        <div class="flex items-center gap-2 min-w-0">
+          <span class="w-2 h-2 rounded-full shrink-0" style="background-color: ${dotColor}"></span>
+          <span class="font-telemetry-numeral-md font-bold text-[#e8ecf8]">${timeStr}</span>
+          <span class="font-semibold truncate" style="color: ${titleColor}">${action}</span>
+          <span class="text-[#93a0c0]">${source}</span>
+        </div>
+        <span class="font-telemetry-numeral-md font-bold text-[#38bdf8] shrink-0">occ ${occ}</span>
+      `;
+
+      if (logContainer.children.length >= 20) {
+        logContainer.removeChild(logContainer.lastElementChild);
+      }
+      logContainer.insertBefore(row, logContainer.firstElementChild);
+    }
+
+    // Board Trigger
+    document.getElementById('btn-board').addEventListener('click', () => {
+      updateOccupancy(currentOccupancy + 1, 'OPERATOR');
+    });
+
+    // Alight Trigger
+    document.getElementById('btn-alight').addEventListener('click', () => {
+      updateOccupancy(currentOccupancy - 1, 'OPERATOR');
+    });
+
+    // Undo Trigger
+    document.getElementById('btn-undo').addEventListener('click', () => {
+      if (occupancyHistory.length > 1) {
+        occupancyHistory.pop(); // remove current
+        const prev = occupancyHistory[occupancyHistory.length - 1];
+        currentOccupancy = prev;
+        
+        occDisplay.innerHTML = `${currentOccupancy} <span class="text-[#3d5084] text-[48px] font-normal">/</span> ${maxCapacity}`;
+        const pct = (currentOccupancy / maxCapacity) * 100;
+        occBar.style.width = `${pct}%`;
+        seatsRemaining.textContent = maxCapacity - currentOccupancy;
+        appendLog('UNDO ACTION', 'OPERATOR', currentOccupancy);
+      }
+    });
+
+    // Reset to 0 (Long press simulation or click for live demo ease)
+    let resetTimer = null;
+    const btnReset = document.getElementById('btn-reset');
+
+    btnReset.addEventListener('mousedown', () => {
+      btnReset.classList.add('bg-red-800');
+      resetTimer = setTimeout(() => {
+        updateOccupancy(0, 'MANUAL RESET');
+        btnReset.classList.remove('bg-red-800');
+      }, 1200);
+    });
+
+    btnReset.addEventListener('mouseup', () => {
+      clearTimeout(resetTimer);
+      btnReset.classList.remove('bg-red-800');
+    });
+
+    btnReset.addEventListener('mouseleave', () => {
+      clearTimeout(resetTimer);
+      btnReset.classList.remove('bg-red-800');
+    });
+
+    // Fallback simple click if user does not hold
+    btnReset.addEventListener('dblclick', () => {
+      updateOccupancy(0, 'DOUBLE-CLICK RESET');
+    });
+
+    // Quick set chips
+    document.querySelectorAll('.btn-preset').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetVal = parseInt(btn.getAttribute('data-target'), 10);
+        updateOccupancy(targetVal, 'PRESET TOUCH');
+      });
+    });
+
+    // Mode Switches
+    const btnAi = document.getElementById('btn-mode-ai');
+    const btnManual = document.getElementById('btn-mode-manual');
+    const btnPaused = document.getElementById('btn-mode-paused');
+
+    function setActiveMode(mode) {
+      currentMode = mode;
+      ribbonMode.textContent = `MODE: ${mode}`;
+
+      [btnAi, btnManual, btnPaused].forEach(b => {
+        b.className = 'flex items-center gap-1.5 px-4 py-1 rounded-lg text-label-md font-label-md font-semibold text-[#93a0c0] hover:text-[#e8ecf8] transition-all';
+      });
+
+      if (mode === 'AI') {
+        btnAi.className = 'flex items-center gap-1.5 px-4 py-1 rounded-lg text-label-md font-label-md font-semibold bg-[#f59e0b] text-[#080d1d] shadow-sm transition-all';
+      } else if (mode === 'MANUAL') {
+        btnManual.className = 'flex items-center gap-1.5 px-4 py-1 rounded-lg text-label-md font-label-md font-semibold bg-[#2563eb] text-[#ffffff] shadow-sm transition-all';
+      } else {
+        btnPaused.className = 'flex items-center gap-1.5 px-4 py-1 rounded-lg text-label-md font-label-md font-semibold bg-[#ef4444] text-[#ffffff] shadow-sm transition-all';
+      }
+      appendLog(`MODE -> ${mode}`, 'SYSTEM', currentOccupancy);
+    }
+
+    btnAi.addEventListener('click', () => setActiveMode('AI'));
+    btnManual.addEventListener('click', () => setActiveMode('MANUAL'));
+    btnPaused.addEventListener('click', () => setActiveMode('PAUSED'));
+
+    // Micro telemetry ticker for realism
+    const fpsElem = document.getElementById('metric-fps');
+    const latencyElem = document.getElementById('metric-latency');
+
+    setInterval(() => {
+      const randFps = (29.8 + Math.random() * 0.7).toFixed(1);
+      const randLat = Math.floor(12 + Math.random() * 5);
+      if (fpsElem) fpsElem.textContent = randFps;
+      if (latencyElem) latencyElem.textContent = randLat;
+    }, 2000);
+
+    // Accuracy test runner simulation
+    document.getElementById('btn-start-test').addEventListener('click', function() {
+      this.textContent = 'Running...';
+      this.classList.add('opacity-50');
+      setTimeout(() => {
+        this.innerHTML = '<span class="material-symbols-outlined text-[16px]">check_circle</span> 30/30 OK';
+        this.classList.remove('opacity-50', 'bg-[#2563eb]');
+        this.classList.add('bg-[#10b981]');
+      }, 1500);
+    });
+
+  })();
+</script></main><footer class="h-[61px] min-h-[44px] max-h-[52px] w-full bg-surface-container border-t border-outline-variant px-margin-lg flex items-center justify-between text-on-surface-variant z-50 shrink-0"><div class="flex items-center gap-space-xl font-label-md text-label-md"><div class="flex items-center gap-space-xs"><span class="text-on-surface-variant font-normal">MODE:</span><span class="text-primary font-semibold">AUTONOMOUS SCHEDULE ROUTING</span></div><div class="h-3 w-[1px] bg-outline-variant"></div><div class="flex items-center gap-space-xs"><span class="text-on-surface-variant font-normal">LATENCY:</span><span class="font-telemetry-numeral-md text-label-md text-on-surface">14ms</span></div><div class="h-3 w-[1px] bg-outline-variant"></div><div class="flex items-center gap-space-xs"><span class="text-on-surface-variant font-normal">FLEET SYNC:</span><span class="font-telemetry-numeral-md text-label-md text-on-surface">42/42 UNITS OK</span></div></div><div class="flex items-center gap-space-lg"><button class="flex items-center gap-space-xs px-space-md py-1 bg-surface-container-high hover:bg-surface-container-highest text-primary hover:text-on-primary-container border border-outline-variant rounded font-label-md text-label-md font-medium transition-colors" type="button"><span class="material-symbols-outlined text-label-lg">speed</span><span>RUN ACCURACY HARNESS</span></button><div class="flex items-center gap-space-xs text-on-surface-variant font-label-sm text-label-sm"><span class="material-symbols-outlined text-label-md">lock</span><span>CONSOLE LOCK: PIN REQUIRED FOR OVERRIDE</span></div></div></footer></body></html>
