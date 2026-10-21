@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.pyc
+test_backend.py
+event_log.json
+event_log.json*
+smartbus.db*
