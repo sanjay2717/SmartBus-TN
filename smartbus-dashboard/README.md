@@ -55,26 +55,28 @@ VITE_CAMERA_URL=http://localhost:8000/video
 
 ---
 
-## Production build (expo / presentation)
+## Lab deployment (single machine)
 
-```bash
-npm run build
-# Output in smartbus-dashboard/dist/
-```
+The lab machine serves the React app, the API, the WebSocket, the
+MJPEG stream, and the SQLite database. No external services.
 
-### Serving from FastAPI
+One-time setup:
+    cd smartbus-dashboard && npm install && cd ..
+    pip install -r requirements.txt
 
-Mount the built `dist/` folder as a static directory in your FastAPI backend:
+Start:
+    ./start.sh          (Linux/macOS)
+    start.bat           (Windows)
 
-```python
-from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
+Open:
+    http://<lab-ip>:8000/         — public dashboard (TV)
+    http://<lab-ip>:8000/admin    — admin dashboard (laptop only)
 
-app = FastAPI()
-app.mount("/", StaticFiles(directory="smartbus-dashboard/dist", html=True), name="static")
-```
+Default PIN is set in the ADMIN_PIN environment variable (default 4821).
+Override it before starting for the expo.
 
-The dashboard is then served at the same origin as the WebSocket, so no CORS issues.
+The database lives in ./smartbus.db next to main.py. Delete it for a
+clean slate; the schema recreates on the next write.
 
 ---
 
