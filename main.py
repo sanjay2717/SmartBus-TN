@@ -3,6 +3,7 @@ import base64
 import hmac
 import json
 import os
+import socket
 import sqlite3
 import threading
 import time
@@ -31,7 +32,7 @@ _db_lock = threading.Lock()
 
 
 def _ensure_schema(conn: sqlite3.Connection) -> None:
-    """Create tables and indexes if they don't exist."""
+    """Create tables and indexes if they don't exist, and migrate columns if needed."""
     conn.executescript(
         """
         PRAGMA journal_mode=WAL;
@@ -43,10 +44,28 @@ def _ensure_schema(conn: sqlite3.Connection) -> None:
           source    TEXT    NOT NULL,
           track_id  INTEGER,
           occupancy INTEGER NOT NULL,
-          mode      TEXT    NOT NULL
+          mode      TEXT    NOT NULL,
+          event_id  TEXT,
+          door      TEXT,
+          applied   INTEGER NOT NULL DEFAULT 1
         );
         CREATE INDEX IF NOT EXISTS idx_events_ts ON events (ts);
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_events_event_id
+          ON events(event_id) WHERE event_id IS NOT NULL;
         """
+    )
+    # Check existing columns in case table was created with earlier schema
+    cursor = conn.cursor()
+    cursor.execute("PRAGMA table_info(events)")
+    existing_cols = {row[1] for row in cursor.fetchall()}
+    if "event_id" not in existing_cols:
+        cursor.execute("ALTER TABLE events ADD COLUMN event_id TEXT")
+    if "door" not in existing_cols:
+        cursor.execute("ALTER TABLE events ADD COLUMN door TEXT")
+    if "applied" not in existing_cols:
+        cursor.execute("ALTER TABLE events ADD COLUMN applied INTEGER NOT NULL DEFAULT 1")
+    cursor.execute(
+        "CREATE UNIQUE INDEX IF NOT EXISTS idx_events_event_id ON events(event_id) WHERE event_id IS NOT NULL"
     )
     conn.commit()
 
@@ -81,8 +100,8 @@ def _migrate_json_to_sqlite() -> None:
         for row in rows:
             try:
                 tmp_conn.execute(
-                    "INSERT INTO events(ts,type,source,track_id,occupancy,mode)"
-                    " VALUES (?,?,?,?,?,?)",
+                    "INSERT INTO events(ts,type,source,track_id,occupancy,mode,event_id,door,applied)"
+                    " VALUES (?,?,?,?,?,?,?,?,?)",
                     (
                         row.get("ts", time.time()),
                         row.get("type", "unknown"),
@@ -90,6 +109,9 @@ def _migrate_json_to_sqlite() -> None:
                         row.get("id"),           # old JSON used "id" for track_id
                         row.get("occupancy", 0),
                         row.get("mode", "ai"),   # old rows had no mode field
+                        None,
+                        None,
+                        1,
                     ),
                 )
             except Exception:
@@ -117,15 +139,18 @@ def log_event(
     occupancy: int,
     mode: str,
     track_id: Optional[int] = None,
+    door: Optional[str] = None,
+    event_id: Optional[str] = None,
+    applied: int = 1,
 ) -> None:
     """Insert one event row into SQLite.
     Recovers gracefully if the DB file was deleted at runtime.
     """
     _INSERT_SQL = (
-        "INSERT INTO events(ts,type,source,track_id,occupancy,mode)"
-        " VALUES (?,?,?,?,?,?)"
+        "INSERT INTO events(ts,type,source,track_id,occupancy,mode,event_id,door,applied)"
+        " VALUES (?,?,?,?,?,?,?,?,?)"
     )
-    params = (time.time(), type, source, track_id, occupancy, mode)
+    params = (time.time(), type, source, track_id, occupancy, mode, event_id, door, applied)
     with _db_lock:
         try:
             _conn.execute(_INSERT_SQL, params)
@@ -144,7 +169,7 @@ def recent_events(limit: int = 20) -> list:
     """Return up to *limit* most-recent events, newest first."""
     try:
         rows = _conn.execute(
-            "SELECT id,ts,type,source,track_id,occupancy,mode"
+            "SELECT id,ts,type,source,track_id,occupancy,mode,event_id,door,applied"
             " FROM events ORDER BY id DESC LIMIT ?",
             (limit,),
         ).fetchall()
@@ -152,17 +177,38 @@ def recent_events(limit: int = 20) -> list:
         _ensure_schema(_conn)
         return []
     return [
-        dict(zip(("id", "ts", "type", "source", "track_id", "occupancy", "mode"), r))
+        dict(zip(("id", "ts", "type", "source", "track_id", "occupancy", "mode", "event_id", "door", "applied"), r))
         for r in rows
     ]
 
+
 DEFAULT_CAPACITY: int = 10
-capacity: int = int(os.getenv("BUS_CAPACITY", DEFAULT_CAPACITY))
+CAPACITY: int = int(os.getenv("CAPACITY", os.getenv("BUS_CAPACITY", str(DEFAULT_CAPACITY))))
+capacity: int = CAPACITY
 boarded: int = 0
 alighted: int = 0
 occupancy: int = 0
 
 ADMIN_PIN: str = os.getenv("ADMIN_PIN", "4821")
+INGEST_KEY: str = os.getenv("INGEST_KEY", "")
+DOORS_EXPECTED: int = int(os.getenv("DOORS_EXPECTED", "2"))
+ENABLE_LOCAL_YOLO: bool = os.getenv("ENABLE_LOCAL_YOLO", "1") not in ("0", "false", "False")
+
+camera_boards: dict = {"entrance": 0, "exit": 0}
+camera_alights: dict = {"entrance": 0, "exit": 0}
+
+door_baselines: dict = {
+    "entrance": {"run_id": None, "server_boards_at_start": 0},
+    "exit":     {"run_id": None, "server_boards_at_start": 0},
+}
+
+last_heartbeat: dict = {
+    "entrance": {"ts": 0.0, "fps": 0.0, "camera_ok": False, "run_id": None, "cumulative_boards": 0, "cumulative_alights": 0},
+    "exit":     {"ts": 0.0, "fps": 0.0, "camera_ok": False, "run_id": None, "cumulative_boards": 0, "cumulative_alights": 0},
+}
+
+latest_jpeg: dict = {"entrance": None, "exit": None}
+last_frame_ts: dict = {"entrance": 0.0, "exit": 0.0}
 
 # Thread lock for state modifications
 state_lock = threading.Lock()
@@ -321,11 +367,44 @@ tracker = TrackerEngine()
 # Helper functions for state & broadcasting
 # ==============================================================================
 
+def compute_camera_ok() -> bool:
+    has_any_heartbeat = any(last_heartbeat[d]["ts"] > 0 for d in ("entrance", "exit"))
+    if ENABLE_LOCAL_YOLO and not has_any_heartbeat:
+        return bool(tracker.camera_ok)
+
+    expected = {"entrance"} if DOORS_EXPECTED == 1 else {"entrance", "exit"}
+    now = time.time()
+    for door in expected:
+        hb = last_heartbeat[door]
+        if hb["ts"] == 0:
+            return False
+        if now - hb["ts"] > 5.0:
+            return False
+        if not hb["camera_ok"]:
+            return False
+    return True
+
+
 def compute_ai_ok() -> bool:
-    """ai_ok = true IFF (camera is open) AND (model is loaded) AND
-    (tracker loop is alive) AND (mode == 'ai')
-    """
-    return bool(tracker.camera_ok and tracker.model_loaded and tracker.tracker_alive and MODE == "ai")
+    """Rewrite compute_ai_ok for two-door ingestion."""
+    if MODE != "ai":
+        return False
+    has_any_heartbeat = any(last_heartbeat[d]["ts"] > 0 for d in ("entrance", "exit"))
+    if ENABLE_LOCAL_YOLO and not has_any_heartbeat:
+        return bool(tracker.camera_ok and tracker.model_loaded and tracker.tracker_alive)
+
+    expected = {"entrance"} if DOORS_EXPECTED == 1 else {"entrance", "exit"}
+    now = time.time()
+    for door in expected:
+        hb = last_heartbeat[door]
+        if hb["ts"] == 0:
+            return False              # never received a heartbeat
+        if now - hb["ts"] > 5.0:
+            return False              # stale
+        if not hb["camera_ok"]:
+            return False              # client reports camera down
+
+    return True
 
 
 def get_state_payload() -> dict:
@@ -333,8 +412,59 @@ def get_state_payload() -> dict:
     pct = round((occupancy / capacity) * 100) if capacity > 0 else 0
     st = compute_status(occupancy, capacity)
     is_ai_ok = compute_ai_ok()
-    curr_fps = tracker.fps if (tracker.tracker_alive and MODE == "ai") else 0.0
-    tracks = tracker.active_tracks if MODE == "ai" else 0
+    is_cam_ok = compute_camera_ok()
+
+    expected = {"entrance"} if DOORS_EXPECTED == 1 else {"entrance", "exit"}
+    now = time.time()
+
+    entrance_hb = last_heartbeat["entrance"]
+    entrance_stale = (entrance_hb["ts"] == 0) or ((now - entrance_hb["ts"]) > 5.0)
+    entrance_client_boards = entrance_hb.get("cumulative_boards", 0)
+    entrance_server_boards = camera_boards["entrance"]
+
+    doors_obj = {
+        "entrance": {
+            "configured": True,
+            "camera_ok": entrance_hb["camera_ok"],
+            "fps": entrance_hb["fps"],
+            "last_heartbeat_at": entrance_hb["ts"],
+            "run_id": entrance_hb["run_id"],
+            "client_boards": entrance_client_boards,
+            "server_boards": entrance_server_boards,
+            "mismatch": entrance_client_boards - entrance_server_boards,
+            "stale": entrance_stale,
+        }
+    }
+
+    if DOORS_EXPECTED == 1:
+        doors_obj["exit"] = {
+            "configured": False,
+        }
+    else:
+        exit_hb = last_heartbeat["exit"]
+        exit_stale = (exit_hb["ts"] == 0) or ((now - exit_hb["ts"]) > 5.0)
+        exit_client_boards = exit_hb.get("cumulative_boards", 0)
+        exit_server_boards = camera_boards["exit"]
+        doors_obj["exit"] = {
+            "configured": True,
+            "camera_ok": exit_hb["camera_ok"],
+            "fps": exit_hb["fps"],
+            "last_heartbeat_at": exit_hb["ts"],
+            "run_id": exit_hb["run_id"],
+            "client_boards": exit_client_boards,
+            "server_boards": exit_server_boards,
+            "mismatch": exit_client_boards - exit_server_boards,
+            "stale": exit_stale,
+        }
+
+    has_any_heartbeat = any(last_heartbeat[d]["ts"] > 0 for d in ("entrance", "exit"))
+    if ENABLE_LOCAL_YOLO and not has_any_heartbeat:
+        curr_fps = tracker.fps if (tracker.tracker_alive and MODE == "ai") else 0.0
+        tracks = tracker.active_tracks if MODE == "ai" else 0
+    else:
+        fps_vals = [last_heartbeat[d]["fps"] for d in expected if last_heartbeat[d]["ts"] > 0]
+        curr_fps = round(sum(fps_vals) / len(fps_vals), 1) if fps_vals else 0.0
+        tracks = 0
 
     return {
         "boarded": boarded,
@@ -343,13 +473,14 @@ def get_state_payload() -> dict:
         "capacity": capacity,
         "percent": pct,
         "status": st,
-        "camera_ok": tracker.camera_ok,
+        "camera_ok": is_cam_ok,
         "timestamp": int(time.time()),
         "source": SOURCE_LAST,
         "mode": MODE,
         "ai_ok": is_ai_ok,
         "fps": curr_fps,
         "active_tracks": tracks,
+        "doors": doors_obj,
     }
 
 
@@ -519,11 +650,22 @@ def verify_pin(x_admin_pin: Optional[str] = Header(None, alias="X-Admin-Pin")):
     return True
 
 
+def verify_ingest_key(x_ingest_key: Optional[str] = Header(None, alias="X-Ingest-Key")):
+    """Verifies the X-Ingest-Key header matches INGEST_KEY.
+    Returns 401 with {"ok": False, "error": "bad_key"} if invalid.
+    """
+    if not INGEST_KEY or not x_ingest_key or not hmac.compare_digest(x_ingest_key.strip().encode("utf-8"), INGEST_KEY.strip().encode("utf-8")):
+        raise AuthException({"ok": False, "error": "bad_key"}, status_code=401)
+    return True
+
+
 # ==============================================================================
 # FastAPI Application & Admin Endpoints
 # ==============================================================================
 
 app = FastAPI(title="SmartBus TN Backend", version="2.0.0")
+
+LAN_HOST: str = os.getenv("LAN_HOST", "").strip()
 
 _origins = [
     "http://localhost:5173",
@@ -531,6 +673,9 @@ _origins = [
     "http://localhost:8000",
     "http://127.0.0.1:8000",
 ]
+if LAN_HOST:
+    _origins.append(f"http://{LAN_HOST}:5173")
+    _origins.append(f"http://{LAN_HOST}:8000")
 
 app.add_middleware(
     CORSMiddleware,
@@ -550,13 +695,29 @@ async def auth_exception_handler(request: Request, exc: AuthException):
 async def startup_event():
     global main_loop
     main_loop = asyncio.get_running_loop()
-    tracker.start()
+    if ENABLE_LOCAL_YOLO:
+        tracker.start()
     asyncio.create_task(heartbeat_loop())
+
+    # Detect LAN IP
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+    except Exception:
+        ip = "127.0.0.1"
+    finally:
+        s.close()
+
+    print(f"[startup] Listening on http://{ip}:8000")
+    key_display = "<default>" if (not INGEST_KEY or INGEST_KEY == "change-me") else "<set>"
+    print(f"[startup] DOORS_EXPECTED={DOORS_EXPECTED} CAPACITY={CAPACITY} INGEST_KEY={key_display}")
 
 
 @app.on_event("shutdown")
 async def shutdown_event():
-    tracker.stop()
+    if ENABLE_LOCAL_YOLO:
+        tracker.stop()
 
 
 async def heartbeat_loop():
@@ -701,30 +862,251 @@ async def admin_simulate_camera(body: SimulateCameraBody, x_admin_pin: Optional[
     }
 
 
+# ==============================================================================
+# Ingestion Endpoints (Two-door ingestion API)
+# ==============================================================================
+
+@app.post("/ingest/event")
+async def ingest_event(
+    request: Request,
+    x_ingest_key: Optional[str] = Header(None, alias="X-Ingest-Key"),
+):
+    verify_ingest_key(x_ingest_key)
+    try:
+        data = await request.json()
+    except Exception:
+        return JSONResponse(status_code=422, content={"ok": False, "error": "bad_payload"})
+
+    door = data.get("door")
+    evt_type = data.get("type")
+    event_id = data.get("event_id")
+    track_id = data.get("track_id")
+
+    if (
+        door not in ("entrance", "exit")
+        or evt_type not in ("board", "alight")
+        or not isinstance(event_id, str)
+        or not event_id.strip()
+    ):
+        return JSONResponse(status_code=422, content={"ok": False, "error": "bad_payload"})
+
+    global occupancy, boarded, alighted, SOURCE_LAST
+
+    with state_lock:
+        with _db_lock:
+            cur = _conn.cursor()
+            cur.execute("SELECT 1 FROM events WHERE event_id = ?", (event_id,))
+            if cur.fetchone() is not None:
+                return {
+                    "ok": True,
+                    "applied": False,
+                    "reason": "duplicate",
+                    "event_id": event_id,
+                }
+
+        # Reject path: MODE != "ai"
+        if MODE != "ai":
+            log_event(
+                type=evt_type,
+                source="camera",
+                occupancy=occupancy,
+                mode=MODE,
+                track_id=track_id,
+                door=door,
+                event_id=event_id,
+                applied=0,
+            )
+            return {
+                "ok": True,
+                "applied": False,
+                "reason": "mode_not_ai",
+                "event_id": event_id,
+            }
+
+        # Reject path: type == "board" AND occupancy >= CAPACITY
+        if evt_type == "board" and occupancy >= capacity:
+            log_event(
+                type=evt_type,
+                source="camera",
+                occupancy=occupancy,
+                mode=MODE,
+                track_id=track_id,
+                door=door,
+                event_id=event_id,
+                applied=0,
+            )
+            return {
+                "ok": True,
+                "applied": False,
+                "reason": "overflow",
+                "event_id": event_id,
+            }
+
+        # Apply path:
+        warning = None
+        if door == "entrance" and evt_type == "alight":
+            warning = "door_type_mismatch"
+        elif door == "exit" and evt_type == "board":
+            warning = "door_type_mismatch"
+
+        SOURCE_LAST = "camera"
+        if evt_type == "board":
+            occupancy = min(capacity, occupancy + 1)
+            boarded += 1
+            camera_boards[door] += 1
+        elif evt_type == "alight":
+            old = occupancy
+            occupancy = max(0, occupancy - 1)
+            alighted += 1
+            camera_alights[door] += 1
+            if old == 0:
+                # When decremented at occupancy 0, log alight_at_zero and return
+                # warning="alight_at_zero" in the response (overriding door_type_mismatch
+                # if present, so the zero-clamp condition is immediately signaled to the client).
+                warning = "alight_at_zero"
+                log_event(
+                    type="alight_at_zero",
+                    source="camera",
+                    occupancy=0,
+                    mode=MODE,
+                    track_id=track_id,
+                    door=door,
+                    applied=1,
+                )
+
+        log_event(
+            type=evt_type,
+            source="camera",
+            occupancy=occupancy,
+            mode=MODE,
+            track_id=track_id,
+            door=door,
+            event_id=event_id,
+            applied=1,
+        )
+
+    notify_state_changed()
+
+    response = {
+        "ok": True,
+        "applied": True,
+        "event_id": event_id,
+        "occupancy": occupancy,
+    }
+    if warning:
+        response["warning"] = warning
+    return response
+
+
+@app.post("/ingest/heartbeat")
+async def ingest_heartbeat(
+    request: Request,
+    x_ingest_key: Optional[str] = Header(None, alias="X-Ingest-Key"),
+):
+    verify_ingest_key(x_ingest_key)
+    try:
+        body = await request.json()
+    except Exception:
+        return JSONResponse(status_code=422, content={"ok": False, "error": "bad_payload"})
+
+    door = body.get("door")
+    if door not in ("entrance", "exit"):
+        return JSONResponse(status_code=422, content={"ok": False, "error": "bad_payload"})
+
+    run_id = body.get("run_id")
+    cum_boards = body.get("cumulative_boards", 0)
+    cum_alights = body.get("cumulative_alights", 0)
+    fps = float(body.get("fps", 0.0))
+    camera_ok = bool(body.get("camera_ok", False))
+    timestamp = float(body.get("timestamp", time.time()))
+
+    with state_lock:
+        prev_run = door_baselines[door]["run_id"]
+        prev_start = door_baselines[door]["server_boards_at_start"]
+
+        if prev_run is None or prev_run != run_id:
+            # First heartbeat of a new run. Record baseline, no comparison.
+            door_baselines[door]["run_id"] = run_id
+            door_baselines[door]["server_boards_at_start"] = camera_boards[door] - cum_boards
+            expected = camera_boards[door]
+            diff_boards = 0
+            match = "ok"
+        else:
+            expected = prev_start + cum_boards
+            diff_boards = abs(expected - camera_boards[door])
+            match = "ok" if diff_boards <= 2 else "mismatch"
+
+        last_heartbeat[door] = {
+            "ts": timestamp,
+            "fps": fps,
+            "camera_ok": camera_ok,
+            "run_id": run_id,
+            "cumulative_boards": cum_boards,
+            "cumulative_alights": cum_alights,
+        }
+
+        server_boards = camera_boards[door]
+        server_alights = camera_alights[door]
+
+    return {
+        "ok": True,
+        "received_at": time.time(),
+        "server_cumulative_boards": server_boards,
+        "server_cumulative_alights": server_alights,
+        "match": match,
+        "diff_boards": diff_boards,
+    }
+
+
+@app.post("/ingest/frame")
+async def ingest_frame(
+    request: Request,
+    door: Optional[str] = None,
+    x_ingest_key: Optional[str] = Header(None, alias="X-Ingest-Key"),
+):
+    verify_ingest_key(x_ingest_key)
+    if not door or door not in ("entrance", "exit"):
+        return JSONResponse(status_code=422, content={"ok": False, "error": "bad_payload"})
+
+    body = await request.body()
+    latest_jpeg[door] = body
+    last_frame_ts[door] = time.time()
+    return {"ok": True}
+
+
 # ------------------------------------------------------------------------------
-# Video & WebSocket Endpoints (STEP 5)
+# Video & WebSocket Endpoints (STEP 5 & STEP 6)
 # ------------------------------------------------------------------------------
 
-def generate_mjpeg_frames():
-    """Streams MJPEG frames from the tracker engine."""
+def generate_door_mjpeg(door: str):
+    """Multipart MJPEG stream reading latest_jpeg[door]. If door is not configured
+    or latest_jpeg is None, sends a 1-pixel transparent JPEG at 1 fps.
+    """
     while True:
-        if not tracker.camera_ok:
-            break
-        frame = tracker.current_frame_bytes
-        yield (
-            b"--frame\r\n"
-            b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n"
-        )
-        time.sleep(0.05)
+        frame = latest_jpeg.get(door)
+        if frame is None and ENABLE_LOCAL_YOLO and door == "entrance" and tracker.tracker_alive:
+            frame = tracker.current_frame_bytes
+
+        if frame is None:
+            yield (
+                b"--frame\r\n"
+                b"Content-Type: image/jpeg\r\n\r\n" + TINY_JPEG_BYTES + b"\r\n"
+            )
+            time.sleep(1.0)
+        else:
+            yield (
+                b"--frame\r\n"
+                b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n"
+            )
+            time.sleep(0.05)
 
 
 @app.get("/video")
-def video_feed():
-    """Serves camera feed as an MJPEG stream at /video."""
-    if not tracker.camera_ok:
-        raise HTTPException(status_code=503, detail="Camera offline")
+def video_feed(door: Optional[str] = "entrance"):
+    """Serves camera feed as an MJPEG stream at /video per door."""
+    target_door = door if door in ("entrance", "exit") else "entrance"
     return StreamingResponse(
-        generate_mjpeg_frames(),
+        generate_door_mjpeg(target_door),
         media_type="multipart/x-mixed-replace; boundary=frame",
     )
 
