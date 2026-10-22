@@ -407,6 +407,128 @@ export default function AdminDashboard() {
             </span>
           </div>
 
+          {/* Per-Door Ingestion Status Panel */}
+          <div
+            className="admin-doors-panel"
+            aria-label="Per-Door Ingestion Status"
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '6px',
+              marginTop: '0.6rem',
+              marginBottom: '0.2rem',
+            }}
+          >
+            {['entrance', 'exit'].map((doorKey) => {
+              const doorData = (data.doors && data.doors[doorKey]) || (doorKey === 'entrance' ? { configured: true, camera_ok: false, fps: 0, stale: true, client_boards: 0, server_boards: 0, mismatch: 0 } : { configured: false });
+              const isConfigured = doorData.configured !== false;
+              const isStale = Boolean(doorData.stale);
+              const isCamOk = Boolean(doorData.camera_ok);
+              const label = doorKey.charAt(0).toUpperCase() + doorKey.slice(1);
+
+              if (!isConfigured) {
+                return (
+                  <div
+                    key={doorKey}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '6px 10px',
+                      background: 'var(--panel-2)',
+                      borderRadius: '8px',
+                      border: '1px solid var(--border)',
+                      fontSize: '0.75rem',
+                      color: 'var(--muted)',
+                    }}
+                  >
+                    <span style={{ fontWeight: 800 }}>{label}</span>
+                    <span
+                      style={{
+                        display: 'inline-block',
+                        width: 8,
+                        height: 8,
+                        borderRadius: '50%',
+                        background: '#64748b',
+                      }}
+                    />
+                    <span style={{ fontStyle: 'italic' }}>not configured</span>
+                  </div>
+                );
+              }
+
+              let dotColor = '#ef4444'; // red if !camera_ok
+              let statusText = 'OFFLINE';
+              if (isCamOk && !isStale) {
+                dotColor = '#10b981'; // green if camera_ok && !stale
+                statusText = 'LIVE';
+              } else if (isStale) {
+                dotColor = '#f59e0b'; // amber if stale
+                statusText = 'STALE';
+              }
+
+              const clientBoards = doorData.client_boards ?? 0;
+              const serverBoards = doorData.server_boards ?? 0;
+              const mismatchDiff = Math.abs(doorData.mismatch ?? 0);
+
+              return (
+                <div
+                  key={doorKey}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '6px 10px',
+                    background: 'var(--panel-2)',
+                    borderRadius: '8px',
+                    border: '1px solid var(--border)',
+                    fontSize: '0.75rem',
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontWeight: 800, color: 'var(--text)' }}>{label}</span>
+                    <span
+                      style={{
+                        display: 'inline-block',
+                        width: 8,
+                        height: 8,
+                        borderRadius: '50%',
+                        background: dotColor,
+                        boxShadow: dotColor === '#10b981' ? '0 0 6px rgba(16, 185, 129, 0.4)' : 'none',
+                      }}
+                    />
+                    <span style={{ fontWeight: 800, color: dotColor, fontSize: '0.7rem' }}>
+                      {statusText}
+                    </span>
+                    <span style={{ color: 'var(--muted)', fontSize: '0.72rem' }}>
+                      {(doorData.fps ?? 0).toFixed(1)} fps
+                    </span>
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    {isStale ? (
+                      <span style={{ color: '#f59e0b', fontWeight: 600 }}>heartbeat stale</span>
+                    ) : (
+                      <>
+                        <span style={{ fontVariantNumeric: 'tabular-nums', color: 'var(--text)', fontWeight: 600 }}>
+                          {clientBoards} / {serverBoards}
+                        </span>
+                        <span style={{ color: 'var(--border)' }}>·</span>
+                        {mismatchDiff <= 2 ? (
+                          <span style={{ color: 'var(--muted)' }}>ok</span>
+                        ) : (
+                          <span style={{ color: '#ef4444', fontWeight: 800 }}>
+                            ⚠ {mismatchDiff} missing
+                          </span>
+                        )}
+                      </>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
           {/* Camera surface */}
           <div
             style={{
