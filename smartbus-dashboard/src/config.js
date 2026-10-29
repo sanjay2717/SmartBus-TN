@@ -1,15 +1,21 @@
 // src/config.js
 // Central configuration — all env vars and constants live here.
 
+// Derive API / WS base from the page's own origin so the app works
+// whether accessed via localhost OR a LAN IP (e.g. 10.x.x.x:8000).
+// VITE_* env vars still override when set explicitly.
+const _origin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:8000';
+const _wsOrigin = _origin.replace(/^http/, 'ws');
+
 export const CONFIG = {
   WS_URL:
-    import.meta.env.VITE_WS_URL || 'ws://localhost:8000/ws',
+    import.meta.env.VITE_WS_URL || `${_wsOrigin}/ws`,
 
   API_URL:
-    import.meta.env.VITE_API_URL || 'http://localhost:8000',
+    import.meta.env.VITE_API_URL || _origin,
 
   CAMERA_STREAM_URL:
-    import.meta.env.VITE_CAMERA_URL || 'http://localhost:8000/video',
+    import.meta.env.VITE_CAMERA_URL || `${_origin}/video`,
 
   /** Mark data stale after this many ms without a backend frame */
   STALE_MS: 3000,

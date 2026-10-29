@@ -38,16 +38,17 @@ def _ensure_schema(conn: sqlite3.Connection) -> None:
         PRAGMA journal_mode=WAL;
         PRAGMA synchronous=NORMAL;
         CREATE TABLE IF NOT EXISTS events (
-          id        INTEGER PRIMARY KEY AUTOINCREMENT,
-          ts        REAL    NOT NULL,
-          type      TEXT    NOT NULL,
-          source    TEXT    NOT NULL,
-          track_id  INTEGER,
-          occupancy INTEGER NOT NULL,
-          mode      TEXT    NOT NULL,
-          event_id  TEXT,
-          door      TEXT,
-          applied   INTEGER NOT NULL DEFAULT 1
+          id               INTEGER PRIMARY KEY AUTOINCREMENT,
+          ts               REAL    NOT NULL,
+          type             TEXT    NOT NULL,
+          source           TEXT    NOT NULL,
+          track_id         INTEGER,
+          occupancy        INTEGER NOT NULL,
+          mode             TEXT    NOT NULL,
+          event_id         TEXT,
+          door             TEXT,
+          applied          INTEGER NOT NULL DEFAULT 1,
+          rejection_reason TEXT
         );
         CREATE INDEX IF NOT EXISTS idx_events_ts ON events (ts);
         CREATE UNIQUE INDEX IF NOT EXISTS idx_events_event_id
@@ -64,6 +65,10 @@ def _ensure_schema(conn: sqlite3.Connection) -> None:
         cursor.execute("ALTER TABLE events ADD COLUMN door TEXT")
     if "applied" not in existing_cols:
         cursor.execute("ALTER TABLE events ADD COLUMN applied INTEGER NOT NULL DEFAULT 1")
+    try:
+        cursor.execute("ALTER TABLE events ADD COLUMN rejection_reason TEXT")
+    except sqlite3.OperationalError:
+        pass  # column already exists
     cursor.execute(
         "CREATE UNIQUE INDEX IF NOT EXISTS idx_events_event_id ON events(event_id) WHERE event_id IS NOT NULL"
     )
@@ -142,15 +147,17 @@ def log_event(
     door: Optional[str] = None,
     event_id: Optional[str] = None,
     applied: int = 1,
+    rejection_reason: Optional[str] = None,
 ) -> None:
     """Insert one event row into SQLite.
     Recovers gracefully if the DB file was deleted at runtime.
     """
     _INSERT_SQL = (
-        "INSERT INTO events(ts,type,source,track_id,occupancy,mode,event_id,door,applied)"
-        " VALUES (?,?,?,?,?,?,?,?,?)"
+        "INSERT INTO events"
+        "(ts,type,source,track_id,occupancy,mode,event_id,door,applied,rejection_reason)"
+        " VALUES (?,?,?,?,?,?,?,?,?,?)"
     )
-    params = (time.time(), type, source, track_id, occupancy, mode, event_id, door, applied)
+    params = (time.time(), type, source, track_id, occupancy, mode, event_id, door, applied, rejection_reason)
     with _db_lock:
         try:
             _conn.execute(_INSERT_SQL, params)
@@ -895,14 +902,30 @@ async def ingest_event(
     with state_lock:
         with _db_lock:
             cur = _conn.cursor()
-            cur.execute("SELECT 1 FROM events WHERE event_id = ?", (event_id,))
-            if cur.fetchone() is not None:
-                return {
-                    "ok": True,
-                    "applied": False,
-                    "reason": "duplicate",
-                    "event_id": event_id,
-                }
+            cur.execute(
+                "SELECT applied, rejection_reason FROM events WHERE event_id = ?",
+                (event_id,),
+            )
+            existing = cur.fetchone()
+            if existing is not None:
+                orig_applied, orig_reason = existing
+                if orig_applied == 1:
+                    # Event was applied — safe duplicate
+                    return {
+                        "ok": True,
+                        "applied": False,
+                        "reason": "duplicate",
+                        "event_id": event_id,
+                    }
+                else:
+                    # Event was rejected — echo original rejection reason so the
+                    # client can decrement its counter correctly.
+                    return {
+                        "ok": True,
+                        "applied": False,
+                        "reason": orig_reason or "duplicate",
+                        "event_id": event_id,
+                    }
 
         # Reject path: MODE != "ai"
         if MODE != "ai":
@@ -915,6 +938,7 @@ async def ingest_event(
                 door=door,
                 event_id=event_id,
                 applied=0,
+                rejection_reason="mode_not_ai",
             )
             return {
                 "ok": True,
@@ -934,6 +958,7 @@ async def ingest_event(
                 door=door,
                 event_id=event_id,
                 applied=0,
+                rejection_reason="overflow",
             )
             return {
                 "ok": True,
