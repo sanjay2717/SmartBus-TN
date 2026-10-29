@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Route Progression Panel (Day Mode) - 1200x400</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800;900&family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Space Grotesk', -apple-system, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #0b1020;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .panel-card {
+      width: 1200px;
+      height: 400px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 24px;
+      background: #ffffff;
+      border: 1.5px solid #dbe2ef;
+      box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.12), 0 0 1px 1px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    @keyframes busBob {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-1.5px); }
+    }
+    @keyframes wheelRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes roadDash {
+      from { stroke-dashoffset: 0; }
+      to { stroke-dashoffset: -120; }
+    }
+    @keyframes cloudDrift {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(18px); }
+    }
+    @keyframes billboardPulse {
+      0%, 100% { filter: drop-shadow(0 4px 14px rgba(37,99,235,0.35)); }
+      50% { filter: drop-shadow(0 6px 20px rgba(37,99,235,0.6)); }
+    }
+    .bus-vehicle {
+      animation: busBob 2.2s ease-in-out infinite;
+    }
+    .road-lines {
+      stroke-dasharray: 28 20;
+      animation: roadDash 1.2s linear infinite;
+    }
+    .clouds-anim {
+      animation: cloudDrift 14s ease-in-out infinite;
+    }
+    .billboard-glow {
+      animation: billboardPulse 3s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1200x400 Container Panel -->
+  <div class="panel-card select-none">
+    
+    <!-- TOP HEADER BAR -->
+    <header class="relative z-20 px-8 pt-5 pb-3 flex items-start justify-between">
+      <div>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse"></span>
+          <span class="text-[12px] font-extrabold uppercase tracking-widest text-slate-500">
+            Route Progression <span class="text-slate-400 font-medium">· TN-01 Live GPS (Day Service)</span>
+          </span>
+        </div>
+        <div class="flex items-baseline gap-3">
+          <h1 class="text-[26px] font-black tracking-tight text-slate-900 leading-none">
+            NEXT STOP: <span class="text-blue-600">PALLADAM</span>
+          </h1>
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-[13px] font-black bg-blue-50 text-blue-700 border border-blue-200">
+            ETA 48S
+          </span>
+        </div>
+      </div>
+
+      <!-- Mode & Tag -->
+      <div class="flex items-center gap-3">
+        <!-- Day indicator badge -->
+        <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-[11px] font-bold">
+          <svg class="w-3.5 h-3.5 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
+          </svg>
+          <span>DAYLIGHT TRANSIT</span>
+        </div>
+        <!-- Pill tag simulated -->
+        <div class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-amber-500 text-white shadow-sm shadow-amber-500/20">
+          <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
+          <span class="text-[12px] font-black tracking-wider uppercase">SIMULATED</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- CENTER HERO CANVAS: 2D SIDE-SCROLLING DAYTIME STREET -->
+    <div class="relative w-full h-[225px] overflow-hidden bg-gradient-to-b from-[#e0f2fe] via-[#ecfdf5]/40 to-[#e2e8f0]">
+      
+      <!-- LAYER 1: SKY & FLUFFY WHITE CLOUDS -->
+      <svg class="absolute inset-0 w-full h-full pointer-events-none clouds-anim" viewBox="0 0 1200 225" preserveAspectRatio="none">
+        <!-- Distant Sun Glow -->
+        <circle cx="980" cy="40" r="32" fill="#fef08a" opacity="0.6"/>
+        <circle cx="980" cy="40" r="18" fill="#fde047" opacity="0.9"/>
+        <!-- Soft clouds -->
+        <g fill="#ffffff" opacity="0.85">
+          <!-- Cloud 1 -->
+          <ellipse cx="160" cy="42" rx="46" ry="18"/>
+          <ellipse cx="190" cy="34" rx="32" ry="22"/>
+          <ellipse cx="130" cy="44" rx="28" ry="14"/>
+          <!-- Cloud 2 -->
+          <ellipse cx="490" cy="30" rx="60" ry="20"/>
+          <ellipse cx="530" cy="22" rx="42" ry="24"/>
+          <ellipse cx="450" cy="34" rx="35" ry="16"/>
+          <!-- Cloud 3 -->
+          <ellipse cx="780" cy="52" rx="50" ry="18"/>
+          <ellipse cx="810" cy="44" rx="34" ry="20"/>
+        </g>
+      </svg>
+
+      <!-- LAYER 2: CITY SKYLINE (Light grey, subtle architectural silhouettes) -->
+      <svg class="absolute inset-x-0 bottom-[54px] w-full h-[150px] pointer-events-none" viewBox="0 0 1200 150" preserveAspectRatio="none">
+        <!-- Far layer: soft pale blue-grey -->
+        <path d="M0,150 L0,70 L45,70 L45,45 L95,45 L95,85 L140,85 L140,30 L185,30 L185,90 L240,90 L240,60 L290,60 L290,100 L360,100 L360,40 L410,40 L410,80 L480,80 L480,25 L530,25 L530,90 L600,90 L600,55 L650,55 L650,95 L720,95 L720,35 L780,35 L780,85 L840,85 L840,50 L900,50 L900,90 L970,90 L970,40 L1030,40 L1030,85 L1110,85 L1110,30 L1170,30 L1170,75 L1200,75 L1200,150 Z" 
+              fill="#cbd5e1" opacity="0.6"/>
+        
+        <!-- Near buildings layer: slightly darker clean grey with subtle windows -->
+        <path d="M20,150 L20,80 L70,80 L70,55 L120,55 L120,150 M150,150 L150,70 L210,70 L210,150 M250,150 L250,45 L320,45 L320,150 M380,150 L380,65 L430,65 L430,150 M490,150 L490,75 L560,75 L560,150 M620,150 L620,50 L680,50 L680,150 M740,150 L740,65 L810,65 L810,150 M860,150 L860,55 L920,55 L920,150 M990,150 L990,70 L1070,70 L1070,150 M1130,150 L1130,55 L1190,55 L1190,150" 
+              fill="#94a3b8" opacity="0.55"/>
+
+        <!-- Crisp minimalist window dots on buildings -->
+        <g fill="#f8fafc" opacity="0.8">
+          <rect x="35" y="90" width="8" height="10" rx="1"/>
+          <rect x="50" y="90" width="8" height="10" rx="1"/>
+          <rect x="35" y="110" width="8" height="10" rx="1"/>
+          <rect x="50" y="110" width="8" height="10" rx="1"/>
+
+          <rect x="270" y="60" width="10" height="12" rx="1"/>
+          <rect x="290" y="60" width="10" height="12" rx="1"/>
+          <rect x="270" y="80" width="10" height="12" rx="1"/>
+          <rect x="290" y="80" width="10" height="12" rx="1"/>
+          <rect x="270" y="100" width="10" height="12" rx="1"/>
+          <rect x="290" y="100" width="10" height="12" rx="1"/>
+
+          <rect x="635" y="70" width="9" height="12" rx="1"/>
+          <rect x="655" y="70" width="9" height="12" rx="1"/>
+          <rect x="635" y="90" width="9" height="12" rx="1"/>
+          <rect x="655" y="90" width="9" height="12" rx="1"/>
+
+          <rect x="875" y="75" width="8" height="10" rx="1"/>
+          <rect x="895" y="75" width="8" height="10" rx="1"/>
+          <rect x="875" y="95" width="8" height="10" rx="1"/>
+          <rect x="895" y="95" width="8" height="10" rx="1"/>
+        </g>
+      </svg>
+
+      <!-- LAYER 3: BRIGHT GREEN TREES & ROADSIDE ELEMENTS -->
+      <svg class="absolute inset-x-0 bottom-[54px] w-full h-[60px] pointer-events-none" viewBox="0 0 1200 60">
+        <!-- Tree clusters -->
+        <g fill="#22c55e">
+          <circle cx="85" cy="35" r="16" fill="#16a34a"/>
+          <circle cx="100" cy="32" r="18"/>
+          <circle cx="115" cy="36" r="14" fill="#15803d"/>
+          
+          <circle cx="340" cy="34" r="16" fill="#16a34a"/>
+          <circle cx="355" cy="30" r="19"/>
+          
+          <circle cx="585" cy="35" r="17"/>
+          <circle cx="602" cy="31" r="20" fill="#16a34a"/>
+          <circle cx="618" cy="36" r="15" fill="#15803d"/>
+          
+          <circle cx="730" cy="36" r="15"/>
+          <circle cx="745" cy="32" r="17" fill="#16a34a"/>
+
+          <circle cx="1080" cy="34" r="18"/>
+          <circle cx="1098" cy="30" r="21" fill="#16a34a"/>
+        </g>
+        <!-- Tree Trunks -->
+        <g fill="#78350f">
+          <rect x="98" y="44" width="4" height="16" rx="1"/>
+          <rect x="353" y="44" width="4" height="16" rx="1"/>
+          <rect x="600" y="44" width="4" height="16" rx="1"/>
+          <rect x="743" y="44" width="4" height="16" rx="1"/>
+          <rect x="1096" y="44" width="4" height="16" rx="1"/>
+        </g>
+        <!-- Modern Streetlights in daytime -->
+        <g stroke="#64748b" stroke-width="2.5" fill="none">
+          <path d="M220,60 L220,18 Q220,10 230,10 L242,10"/>
+          <path d="M460,60 L460,18 Q460,10 470,10 L482,10"/>
+          <path d="M700,60 L700,18 Q700,10 710,10 L722,10"/>
+        </g>
+        <g fill="#94a3b8">
+          <path d="M238,10 L246,10 L244,14 L240,14 Z"/>
+          <path d="M478,10 L486,10 L484,14 L480,14 Z"/>
+          <path d="M718,10 L726,10 L724,14 L720,14 Z"/>
+        </g>
+      </svg>
+
+      <!-- LAYER 4: THE SOLID ROAD WITH DASHED MARKINGS -->
+      <div class="absolute inset-x-0 bottom-0 h-[56px] bg-[#1e293b] border-t-2 border-slate-700">
+        <!-- Curbside walk -->
+        <div class="h-[6px] w-full bg-[#94a3b8] border-b border-slate-600 flex">
+          <div class="h-full w-full bg-[repeating-linear-gradient(90deg,#94a3b8,#94a3b8_20px,#cbd5e1_20px,#cbd5e1_40px)]"></div>
+        </div>
+        <!-- Moving road dashed centerline -->
+        <svg class="w-full h-[24px] mt-2" viewBox="0 0 1200 24">
+          <line x1="0" y1="12" x2="1200" y2="12" stroke="#ffffff" stroke-width="4" stroke-linecap="round" class="road-lines"/>
+        </svg>
+      </div>
+
+      <!-- LAYER 5: THE STOP SIGN (LED BILLBOARD - DAY MODE) -->
+      <!-- Positioned hovering over the road on the right (approx 78% from left) -->
+      <div class="absolute right-[110px] bottom-[28px] z-20 flex flex-col items-center billboard-glow">
+        <!-- LED Billboard Sign -->
+        <div class="relative bg-slate-900 px-6 py-2.5 rounded-xl border-2 border-blue-500 shadow-xl flex flex-col items-center min-w-[210px]">
+          <!-- Top badge -->
+          <div class="flex items-center gap-1.5 mb-0.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            <span class="text-[9px] font-black uppercase tracking-widest text-blue-300">UPCOMING STOP · 0.8 KM</span>
+          </div>
+          <!-- Bright white text on vibrant navy sign -->
+          <span class="text-[28px] font-black tracking-widest text-white drop-shadow-md leading-tight">
+            PALLADAM
+          </span>
+          <div class="text-[10px] font-extrabold text-blue-400 tracking-wider mt-0.5 uppercase">
+            BUS STOP #02
+          </div>
+          <!-- LED screen dot texture overlay -->
+          <div class="absolute inset-0 rounded-xl bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:6px_6px] opacity-20 pointer-events-none"></div>
+        </div>
+
+        <!-- Cantilevered Truss Posts -->
+        <svg class="w-[180px] h-[58px]" viewBox="0 0 180 58" fill="none">
+          <path d="M30,0 L30,58 M150,0 L150,58" stroke="#475569" stroke-width="5" stroke-linecap="round"/>
+          <path d="M30,12 L150,38 M150,12 L30,38" stroke="#64748b" stroke-width="2"/>
+        </svg>
+      </div>
+
+      <!-- LAYER 6: THE VIBRANT BLUE BUS (TN-01) WITH SPEED LINES -->
+      <!-- Positioned ~20% from left edge -->
+      <div class="absolute left-[190px] bottom-[14px] z-30 flex items-center bus-vehicle">
+        
+        <!-- Speed Lines Streaming Behind the Bus -->
+        <svg class="w-[90px] h-[48px] -mr-3" viewBox="0 0 90 48" fill="none">
+          <line x1="10" y1="12" x2="80" y2="12" stroke="#3b82f6" stroke-width="3" stroke-linecap="round" opacity="0.75"/>
+          <line x1="30" y1="22" x2="88" y2="22" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+          <line x1="5" y1="32" x2="75" y2="32" stroke="#93c5fd" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
+          <line x1="40" y1="40" x2="85" y2="40" stroke="#bfdbfe" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+        </svg>
+
+        <!-- Bus SVG Graphics (Flat Modern Clean Style) -->
+        <svg class="w-[195px] h-[82px]" viewBox="0 0 195 82" fill="none">
+          <!-- Soft Ground Shadow -->
+          <ellipse cx="98" cy="74" rx="84" ry="5.5" fill="#0f172a" opacity="0.45"/>
+
+          <!-- Bus Body (Vibrant Blue TN-01) -->
+          <g>
+            <!-- Lower Main Body -->
+            <rect x="12" y="24" width="168" height="42" rx="10" fill="#2563eb"/>
+            <!-- White accent upper roof section -->
+            <path d="M22,10 L168,10 Q178,10 178,22 L178,26 L12,26 L12,22 Q12,10 22,10 Z" fill="#ffffff"/>
+            
+            <!-- Side Decal stripe (White + Gold TN Line) -->
+            <path d="M12,48 L180,48 L178,54 L12,54 Z" fill="#ffffff"/>
+            <path d="M12,52 L178,52 L177,54 L12,54 Z" fill="#f59e0b"/>
+
+            <!-- Front Slanted Windshield & Passenger Windows -->
+            <!-- Front Windshield -->
+            <path d="M148,15 L174,15 Q177,15 176,26 L175,40 L148,40 Z" fill="#0f172a"/>
+            <!-- Windows Row -->
+            <rect x="22" y="16" width="22" height="24" rx="4" fill="#0f172a"/>
+            <rect x="49" y="16" width="26" height="24" rx="4" fill="#0f172a"/>
+            <rect x="80" y="16" width="26" height="24" rx="4" fill="#0f172a"/>
+            <rect x="111" y="16" width="26" height="24" rx="4" fill="#0f172a"/>
+
+            <!-- Window glass reflection stripes -->
+            <path d="M24,36 L38,18 M52,36 L68,18 M83,36 L99,18 M114,36 L130,18 M152,36 L168,18" stroke="#93c5fd" stroke-width="1.8" stroke-linecap="round" opacity="0.8"/>
+
+            <!-- Front Headlight (Day mode: clean crisp lens) -->
+            <rect x="174" y="46" width="6" height="8" rx="2" fill="#fef08a" stroke="#d97706" stroke-width="1"/>
+            <!-- Headlight forward beam projection (subtle day beam) -->
+            <polygon points="180,50 250,38 250,66" fill="#fef08a" opacity="0.15"/>
+
+            <!-- Rear Taillight -->
+            <rect x="12" y="46" width="4" height="8" rx="1.5" fill="#ef4444"/>
+
+            <!-- Vehicle Label / Unit badge -->
+            <rect x="74" y="58" width="48" height="8" rx="2" fill="#1e3a8a"/>
+            <text x="98" y="64.5" fill="#ffffff" font-family="'Space Grotesk', sans-serif" font-size="6.5" font-weight="800" text-anchor="middle" letter-spacing="0.5">TN-01 · EXPR</text>
+            
+            <!-- Wheel Cutouts -->
+            <circle cx="48" cy="66" r="14" fill="#1e293b"/>
+            <circle cx="142" cy="66" r="14" fill="#1e293b"/>
+
+            <!-- Wheel 1 (Front/Right) -->
+            <g class="wheel-rotate" style="transform-origin: 142px 66px;">
+              <circle cx="142" cy="66" r="11" fill="#334155" stroke="#1e293b" stroke-width="2"/>
+              <circle cx="142" cy="66" r="6" fill="#94a3b8"/>
+              <circle cx="142" cy="66" r="2.5" fill="#0f172a"/>
+            </g>
+
+            <!-- Wheel 2 (Rear/Left) -->
+            <g class="wheel-rotate" style="transform-origin: 48px 66px;">
+              <circle cx="48" cy="66" r="11" fill="#334155" stroke="#1e293b" stroke-width="2"/>
+              <circle cx="48" cy="66" r="6" fill="#94a3b8"/>
+              <circle cx="48" cy="66" r="2.5" fill="#0f172a"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM TELEMETRY BAR (HIGH CONTRAST & LEGIBILITY AT 4 METERS) -->
+    <footer class="relative z-20 px-8 py-3.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+      
+      <!-- Bottom-Left: Speed -->
+      <div class="flex items-center gap-3">
+        <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+        <div class="flex items-baseline gap-2">
+          <span class="text-[12px] font-extrabold uppercase tracking-wider text-slate-500">CURRENT SPEED:</span>
+          <span class="text-[20px] font-black text-slate-900 tabular-nums">48 <span class="text-[14px] font-bold text-slate-600">km/h</span></span>
+        </div>
+        <span class="px-2.5 py-0.5 rounded text-[11px] font-extrabold bg-emerald-100 text-emerald-800">
+          OPTIMAL
+        </span>
+      </div>
+
+      <!-- Center: Corridor Waypoint Sequence -->
+      <div class="flex items-center gap-2 text-[12px] font-extrabold tracking-wider text-slate-400">
+        <span class="text-slate-600">TIRUPPUR</span>
+        <span class="text-blue-500 font-bold">▶</span>
+        <span class="px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-black">PALLADAM (NEXT)</span>
+        <span class="text-slate-300">▶</span>
+        <span class="text-slate-400">DHARAPURAM</span>
+        <span class="text-slate-300">▶</span>
+        <span class="text-slate-400">KARUR</span>
+      </div>
+
+      <!-- Bottom-Right: Scheduled Arrival -->
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+        <span class="text-[12px] font-extrabold uppercase tracking-wider text-slate-500">SCHEDULED ARRIVAL:</span>
+        <span class="text-[20px] font-black text-slate-900 tabular-nums">14:45 <span class="text-[13px] font-extrabold text-slate-600">IST</span></span>
+      </div>
+
+    </footer>
+
+  </div>
+
+</body>
+</html>

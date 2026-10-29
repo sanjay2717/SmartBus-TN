@@ -1736,3 +1736,627 @@ kbd {
   font-weight: 800;
   flex-shrink: 0;
 }
+
+
+/* ── 26. Route Progression Animated Panel (Day / Night Stitch) ─────── */
+.route-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+}
+
+.route-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.6vh;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.route-header__left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.route-header__sub {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: clamp(0.65rem, 0.72vw, 0.8rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.route-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: pulse-dot 1.4s ease-in-out infinite;
+}
+
+.route-status-dot--day {
+  background: #2563eb;
+  box-shadow: 0 0 8px rgba(37, 99, 235, 0.5);
+}
+
+.route-status-dot--night {
+  background: #22d3ee;
+  box-shadow: 0 0 10px #22d3ee;
+}
+
+.route-sub-text {
+  font-weight: 800;
+}
+
+.route-sub-fleet {
+  opacity: 0.8;
+  font-weight: 600;
+}
+
+.route-header__main {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+.route-next-title {
+  margin: 0;
+  font-size: clamp(1.15rem, 1.4vw, 1.65rem);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  line-height: 1.1;
+}
+
+.route-target--day {
+  color: #2563eb;
+}
+
+.route-target--night {
+  color: #22d3ee;
+  text-shadow: 0 0 12px rgba(34, 211, 238, 0.5);
+}
+
+.route-eta-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 9999px;
+  font-size: clamp(0.68rem, 0.75vw, 0.85rem);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.route-eta--day {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+.route-eta--night {
+  background: rgba(8, 51, 68, 0.8);
+  color: #67e8f9;
+  border: 1px solid rgba(14, 116, 144, 0.6);
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.2);
+}
+
+.route-header__right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.route-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: clamp(0.65rem, 0.7vw, 0.8rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.route-badge--day {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #92400e;
+}
+
+.route-badge--night {
+  background: rgba(30, 27, 75, 0.7);
+  border: 1px solid rgba(67, 56, 202, 0.5);
+  color: #a5b4fc;
+}
+
+.route-badge__icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.route-sim-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: #f59e0b;
+  color: #ffffff;
+  font-size: clamp(0.65rem, 0.7vw, 0.8rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+}
+
+.route-sim-ping {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ffffff;
+  animation: pulse-dot 1.2s ease-in-out infinite;
+}
+
+.route-canvas {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  margin: 0.6vh 0;
+}
+
+.route-canvas--day {
+  background: linear-gradient(180deg, #e0f2fe 0%, rgba(236, 253, 245, 0.4) 50%, #e2e8f0 100%);
+  border: 1px solid #cbd5e1;
+}
+
+.route-canvas--night {
+  background: linear-gradient(180deg, #050816 0%, #091026 50%, #0f172a 100%);
+  border: 1px solid #1e293b;
+}
+
+.route-city-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-repeat: repeat-x;
+  background-size: 2000px 100%;
+  background-position: 0 0;
+  animation: scrollCity 20s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes scrollCity {
+  from { background-position: 0 0; }
+  to { background-position: -2000px 0; }
+}
+
+.route-billboard {
+  position: absolute;
+  right: 7%;
+  bottom: 20px;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 210px;
+  animation: billboardFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes billboardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.billboard-glow {
+  animation: billboardPulse 3s ease-in-out infinite;
+}
+
+@keyframes billboardPulse {
+  0%, 100% { filter: drop-shadow(0 4px 14px rgba(37,99,235,0.35)); }
+  50% { filter: drop-shadow(0 6px 20px rgba(37,99,235,0.6)); }
+}
+
+.neon-pulsing {
+  animation: neonGlow 2.5s ease-in-out infinite;
+}
+
+@keyframes neonGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.6), 0 0 45px rgba(37, 99, 235, 0.4), inset 0 0 15px rgba(56, 189, 248, 0.4);
+    text-shadow: 0 0 10px #38bdf8, 0 0 25px #0284c7, 0 0 40px #2563eb;
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(56, 189, 248, 0.85), 0 0 65px rgba(37, 99, 235, 0.6), inset 0 0 22px rgba(56, 189, 248, 0.6);
+    text-shadow: 0 0 14px #7dd3fc, 0 0 32px #38bdf8, 0 0 55px #0284c7;
+  }
+}
+
+.route-billboard__panel {
+  position: relative;
+  padding: 8px 18px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.route-billboard--day .route-billboard__panel {
+  background: #0f172a;
+  border: 2px solid #3b82f6;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.4);
+}
+
+.route-billboard--night .route-billboard__panel {
+  background: #050b18;
+  border: 2px solid #22d3ee;
+}
+
+.route-billboard__badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 2px;
+}
+
+.route-billboard__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.route-billboard--day .route-billboard__dot {
+  background: #34d399;
+}
+
+.route-billboard--night .route-billboard__dot {
+  background: #22d3ee;
+  box-shadow: 0 0 6px #22d3ee;
+}
+
+.route-billboard__sub {
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.route-billboard--day .route-billboard__sub {
+  color: #93c5fd;
+}
+
+.route-billboard--night .route-billboard__sub {
+  color: #67e8f9;
+}
+
+.route-billboard__name {
+  font-size: clamp(1.3rem, 1.6vw, 1.85rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  line-height: 1.1;
+  color: #ffffff;
+  text-align: center;
+}
+
+.route-billboard--day .route-billboard__name {
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.route-billboard__foot {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.route-billboard--day .route-billboard__foot {
+  color: #60a5fa;
+}
+
+.route-billboard--night .route-billboard__foot {
+  color: #38bdf8;
+}
+
+.route-billboard__truss {
+  width: 140px;
+  height: 46px;
+  margin-top: -2px;
+}
+
+.route-road {
+  position: absolute;
+  inset-x: 0;
+  bottom: 0;
+  height: 48px;
+}
+
+.route-road--day {
+  background: #1e293b;
+  border-top: 2px solid #334155;
+}
+
+.route-road--night {
+  background: #090d18;
+  border-top: 1px solid #1e293b;
+}
+
+.route-curb {
+  height: 5px;
+  width: 100%;
+  background: #94a3b8;
+  border-bottom: 1px solid #64748b;
+}
+
+.route-wet-sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(8, 145, 178, 0.15) 0%, transparent 60%, rgba(30, 58, 138, 0.25) 100%);
+  pointer-events: none;
+}
+
+.route-road-lines-svg {
+  width: 100%;
+  height: 20px;
+  margin-top: 6px;
+}
+
+.road-lines {
+  stroke-dasharray: 28 20;
+  animation: roadDash 1s linear infinite;
+}
+
+@keyframes roadDash {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -96; }
+}
+
+.route-ground-streak-sign {
+  position: absolute;
+  right: 5%;
+  bottom: 2px;
+  width: 220px;
+  height: 14px;
+  background: rgba(34, 211, 238, 0.25);
+  filter: blur(8px);
+  border-radius: 9999px;
+  pointer-events: none;
+}
+
+.route-ground-streak-headlight {
+  position: absolute;
+  left: 32%;
+  bottom: 2px;
+  width: 200px;
+  height: 14px;
+  background: rgba(186, 230, 253, 0.2);
+  filter: blur(8px);
+  border-radius: 9999px;
+  pointer-events: none;
+}
+
+.route-bus-anchor {
+  position: absolute;
+  left: 18%;
+  bottom: 10px;
+  z-index: 25;
+}
+
+.route-bus-assembly {
+  display: flex;
+  align-items: center;
+  animation: busBounce 0.8s ease-in-out infinite;
+}
+
+@keyframes busBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+.bus-speed-lines {
+  width: 75px;
+  height: 40px;
+  margin-right: -10px;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+.route-bus-svg {
+  width: 175px;
+  height: 74px;
+  flex-shrink: 0;
+}
+
+.wheel-rotate {
+  animation: spinWheel 0.6s linear infinite;
+}
+
+@keyframes spinWheel {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.route-headlight-cone {
+  width: 240px;
+  height: 82px;
+  margin-left: -6px;
+  flex-shrink: 0;
+  pointer-events: none;
+  animation: headlightSweep 3s ease-in-out infinite;
+}
+
+@keyframes headlightSweep {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 0.95; }
+}
+
+.route-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.6vh;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+  font-size: clamp(0.72rem, 0.85vw, 0.95rem);
+}
+
+.route-speed-cluster {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.route-speed-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 6px #22c55e;
+  flex-shrink: 0;
+}
+
+.route-speed-text {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.route-footer-label {
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  font-size: clamp(0.68rem, 0.75vw, 0.85rem);
+}
+
+.route-footer-val {
+  font-weight: 900;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(0.95rem, 1.1vw, 1.25rem);
+}
+
+.route-footer-unit {
+  font-weight: 700;
+  color: var(--muted);
+  font-size: 0.8em;
+}
+
+.route-speed-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: clamp(0.62rem, 0.68vw, 0.75rem);
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.route-speed-badge--day {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.route-speed-badge--night {
+  background: rgba(6, 78, 59, 0.7);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #6ee7b7;
+}
+
+.route-timeline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 800;
+  font-size: clamp(0.65rem, 0.76vw, 0.88rem);
+  letter-spacing: 0.04em;
+}
+
+.route-timeline__item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.route-timeline__arrow {
+  color: var(--muted);
+  font-size: 0.75em;
+  opacity: 0.6;
+}
+
+.route-timeline__node {
+  white-space: nowrap;
+}
+
+.route-timeline__node--passed {
+  color: var(--muted);
+  opacity: 0.75;
+}
+
+.route-timeline__node--upcoming {
+  color: var(--muted);
+}
+
+.route-timeline__current {
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.route-timeline__current--day {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #93c5fd;
+}
+
+.route-timeline__current--night {
+  background: rgba(8, 51, 68, 0.85);
+  border: 1px solid rgba(6, 182, 212, 0.6);
+  color: #67e8f9;
+  box-shadow: 0 0 8px rgba(34, 211, 238, 0.3);
+}
+
+.route-arrival-cluster {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.route-arrival-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #3b82f6;
+  box-shadow: 0 0 6px #3b82f6;
+  flex-shrink: 0;
+}
+
+/* ── Paused state: freezes all CSS animations when stopped at station ─ */
+.route-progression--paused .route-city-bg,
+.route-progression--paused .road-lines,
+.route-progression--paused .bus-vehicle,
+.route-progression--paused .wheel-rotate,
+.route-progression--paused .bus-speed-lines {
+  animation-play-state: paused !important;
+}

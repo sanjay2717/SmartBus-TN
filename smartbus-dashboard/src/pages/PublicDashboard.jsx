@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useBusSocket } from '../hooks/useBusSocket.js';
 import LiveCameraTag from '../components/LiveCameraTag.jsx';
 import ThemeToggle from '../components/ThemeToggle.jsx';
+import RouteProgression from '../components/RouteProgression.jsx';
 import { CONFIG, STATUS_COLOR } from '../config.js';
 
 const STOPS = CONFIG.ROUTE_STOPS;
@@ -24,30 +25,6 @@ export default function PublicDashboard() {
 
   // Camera stream error state (on error, render nothing inside the frame)
   const [camError, setCamError] = useState(false);
-
-  // Route progression simulated animation loop
-  const [progress, setProgress] = useState(0);
-  const startRef = useRef(null);
-  const rafRef = useRef(null);
-
-  useEffect(() => {
-    startRef.current = performance.now();
-    function tick(now) {
-      const elapsed = (now - startRef.current) / 1000;
-      const t = (elapsed % JOURNEY_S) / JOURNEY_S;
-      setProgress(t);
-      rafRef.current = requestAnimationFrame(tick);
-    }
-    rafRef.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, []);
-
-  const segments = STOPS.length - 1;
-  const segmentIndex = Math.min(Math.floor(progress * segments), segments - 1);
-  const nextStopIndex = Math.min(segmentIndex + 1, STOPS.length - 1);
-  const nextStop = STOPS[nextStopIndex];
-  const etaSeconds = Math.ceil((1 - progress) * JOURNEY_S);
-  const etaLabel = etaSeconds > 60 ? `${Math.floor(etaSeconds / 60)}m ${etaSeconds % 60}s` : `${etaSeconds}s`;
 
   // Hidden admin hotspot: 5 concurrent pointerdowns within 300ms in bottom-right 80x80px
   const [showPinModal, setShowPinModal] = useState(false);
@@ -179,76 +156,7 @@ export default function PublicDashboard() {
       {/* Main Bento Grid (3 columns, 2 rows matching Stitch reference) */}
       <main className="pub-grid-3x2" role="main">
         {/* TILE A: Route Progression (spans col 1-2, row 1) */}
-        <section
-          className="pub-card"
-          style={{ gridColumn: '1 / 3', gridRow: '1 / 2' }}
-          aria-label="Route progression map"
-        >
-          <div className="pub-card__header">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1vw' }}>
-              <span className="pub-card__title">Route Progression</span>
-              <span className="tag" style={{ background: 'rgba(56, 189, 248, 0.15)', color: 'var(--accent-1)' }}>
-                NEXT STOP: {nextStop} (ETA {etaLabel})
-              </span>
-            </div>
-            <span className="tag tag--sim">SIMULATED</span>
-          </div>
-
-          {/* Stepper Graphic */}
-          <div className="pub-route-track" role="img" aria-label="Route stops and bus position">
-            <div className="pub-route-rail" />
-            <div
-              className="pub-route-fill"
-              style={{ width: `calc(${progress * 100}% * 0.95)` }}
-            />
-
-            {/* Moving Bus Marker */}
-            <div
-              className="pub-bus-marker"
-              style={{ left: `calc(2.5vw + (100% - 5vw) * ${progress})` }}
-            >
-              <span>🚌</span>
-              <span>TN-01</span>
-            </div>
-
-            {/* 5 Stops */}
-            {STOPS.map((stop, i) => {
-              const stopPos = i / (STOPS.length - 1);
-              const isPast = progress >= stopPos;
-              const isNext = i === nextStopIndex;
-
-              return (
-                <div
-                  key={stop}
-                  className={`pub-stop-node ${isPast ? 'pub-stop-node--past' : ''} ${isNext ? 'pub-stop-node--next' : ''}`}
-                >
-                  <div className="pub-stop-circle">
-                    {isPast && !isNext ? '✓' : i + 1}
-                  </div>
-                  <div className="pub-stop-label">{stop}</div>
-                  <div className="pub-stop-sub">
-                    {i === 0
-                      ? 'Departed'
-                      : isNext
-                      ? `Next (${etaSeconds}s)`
-                      : i === STOPS.length - 1
-                      ? 'Terminus'
-                      : `Stop ${i + 1}`}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="pub-card__footer">
-            <div>
-              CURRENT SPEED: <strong style={{ color: 'var(--text)' }}>48 km/h</strong>
-            </div>
-            <div>
-              SCHEDULED ARRIVAL AT KARUR: <strong style={{ color: 'var(--text)' }}>14:45 IST</strong>
-            </div>
-          </div>
-        </section>
+        <RouteProgression />
 
         {/* TILE B: Occupancy KPI (spans col 3, row 1-2 — Visual Hero) */}
         <section

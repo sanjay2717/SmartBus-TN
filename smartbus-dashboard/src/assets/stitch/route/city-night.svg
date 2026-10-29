@@ -1,0 +1,176 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 180" width="2000" height="180">
+  <defs>
+    <linearGradient id="nightSky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#050816"/>
+      <stop offset="60%" stop-color="#0a1128"/>
+      <stop offset="100%" stop-color="#111c38"/>
+    </linearGradient>
+    <radialGradient id="moonGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.5"/>
+      <stop offset="60%" stop-color="#0284c7" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="neonBlur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <linearGradient id="warmLightBeam" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" stop-opacity="0.5"/>
+      <stop offset="65%" stop-color="#f59e0b" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Sky gradient -->
+  <rect x="0" y="0" width="2000" height="180" fill="url(#nightSky)"/>
+
+  <!-- Moon Atmosphere & Crescent Moon -->
+  <circle cx="520" cy="42" r="42" fill="url(#moonGlow)"/>
+  <path d="M528,26 C515,28 505,39 505,53 C505,67 516,78 530,79 C518,78 509,68 509,56 C509,42 517,30 528,26 Z" fill="#e0f2fe" filter="url(#neonBlur)"/>
+
+  <circle cx="1520" cy="42" r="42" fill="url(#moonGlow)"/>
+  <path d="M1528,26 C1515,28 1505,39 1505,53 C1505,67 1516,78 1530,79 C1518,78 1509,68 1509,56 C1509,42 1517,30 1528,26 Z" fill="#e0f2fe" filter="url(#neonBlur)"/>
+
+  <!-- Star field -->
+  <g fill="#ffffff">
+    <circle cx="120" cy="25" r="1.5" opacity="0.9"/>
+    <circle cx="210" cy="42" r="1.2" opacity="0.7"/>
+    <circle cx="340" cy="20" r="1.8" opacity="0.95"/>
+    <circle cx="430" cy="38" r="1.0" opacity="0.6"/>
+    <circle cx="680" cy="18" r="1.6" opacity="0.85"/>
+    <circle cx="790" cy="44" r="1.2" opacity="0.75"/>
+    <circle cx="920" cy="24" r="1.5" opacity="0.9"/>
+    <circle cx="1060" cy="36" r="1.4" opacity="0.8"/>
+    <circle cx="1120" cy="25" r="1.5" opacity="0.9"/>
+    <circle cx="1210" cy="42" r="1.2" opacity="0.7"/>
+    <circle cx="1340" cy="20" r="1.8" opacity="0.95"/>
+    <circle cx="1430" cy="38" r="1.0" opacity="0.6"/>
+    <circle cx="1680" cy="18" r="1.6" opacity="0.85"/>
+    <circle cx="1790" cy="44" r="1.2" opacity="0.75"/>
+    <circle cx="1920" cy="24" r="1.5" opacity="0.9"/>
+    <circle cx="1980" cy="36" r="1.4" opacity="0.8"/>
+  </g>
+
+  <!-- Far Dark Navy Buildings (Seamless at y=85) -->
+  <path d="M0,180 L0,85 L50,85 L50,60 L105,60 L105,100 L160,100 L160,45 L210,45 L210,105 L270,105 L270,72 L330,72 L330,115 L400,115 L400,52 L460,52 L460,95 L530,95 L530,38 L590,38 L590,100 L660,100 L660,65 L720,65 L720,110 L790,110 L790,46 L850,46 L850,96 L920,96 L920,58 L980,58 L980,100 L1050,100 L1050,52 L1120,52 L1120,90 L1180,90 L1180,60 L1230,60 L1230,100 L1300,100 L1300,45 L1360,45 L1360,105 L1430,105 L1430,72 L1490,72 L1490,115 L1560,115 L1560,52 L1620,52 L1620,95 L1690,95 L1690,38 L1750,38 L1750,100 L1820,100 L1820,65 L1880,65 L1880,110 L1950,110 L1950,85 L2000,85 L2000,180 Z" fill="#0d1424" opacity="0.95"/>
+
+  <!-- Near Solid Dark Indigo Buildings (Seamless at y=68) -->
+  <path d="M0,180 L0,68 L30,68 L30,95 L85,95 L85,65 L140,65 L140,180 M175,180 L175,80 L240,80 L240,180 M280,180 L280,52 L355,52 L355,180 M420,180 L420,75 L475,75 L475,180 M540,180 L540,85 L610,85 L610,180 M670,180 L670,58 L735,58 L735,180 M800,180 L800,74 L870,74 L870,180 M930,180 L930,62 L990,62 L990,180 M1060,180 L1060,82 L1140,82 L1140,180 M1175,180 L1175,80 L1240,80 L1240,180 M1280,180 L1280,52 L1355,52 L1355,180 M1420,180 L1420,75 L1475,75 L1475,180 M1540,180 L1540,85 L1610,85 L1610,180 M1670,180 L1670,58 L1735,58 L1735,180 M1800,180 L1800,74 L1870,74 L1870,180 M1930,180 L1930,68 L2000,68 L2000,180 Z" fill="#111a30"/>
+
+  <!-- Glowing Yellow & Amber Windows -->
+  <g fill="#fef08a" filter="url(#neonBlur)">
+    <rect x="52" y="102" width="9" height="12" rx="1"/>
+    <rect x="68" y="102" width="9" height="12" rx="1"/>
+    <rect x="52" y="122" width="9" height="12" rx="1" fill="#fde047"/>
+
+    <rect x="302" y="70" width="10" height="14" rx="1"/>
+    <rect x="328" y="70" width="10" height="14" rx="1"/>
+    <rect x="302" y="92" width="10" height="14" rx="1"/>
+    <rect x="328" y="114" width="10" height="14" rx="1" fill="#fbbf24"/>
+
+    <rect x="438" y="90" width="10" height="12" rx="1"/>
+    <rect x="458" y="108" width="10" height="12" rx="1"/>
+
+    <rect x="690" y="76" width="10" height="14" rx="1"/>
+    <rect x="714" y="96" width="10" height="14" rx="1"/>
+
+    <rect x="824" y="88" width="10" height="12" rx="1"/>
+    <rect x="846" y="88" width="10" height="12" rx="1"/>
+    <rect x="824" y="108" width="10" height="12" rx="1" fill="#fbbf24"/>
+
+    <rect x="1085" y="96" width="10" height="12" rx="1"/>
+    <rect x="1110" y="116" width="10" height="12" rx="1"/>
+
+    <rect x="1302" y="70" width="10" height="14" rx="1"/>
+    <rect x="1328" y="70" width="10" height="14" rx="1"/>
+    <rect x="1302" y="92" width="10" height="14" rx="1"/>
+    <rect x="1328" y="114" width="10" height="14" rx="1" fill="#fbbf24"/>
+
+    <rect x="1438" y="90" width="10" height="12" rx="1"/>
+    <rect x="1458" y="108" width="10" height="12" rx="1"/>
+
+    <rect x="1690" y="76" width="10" height="14" rx="1"/>
+    <rect x="1714" y="96" width="10" height="14" rx="1"/>
+
+    <rect x="1824" y="88" width="10" height="12" rx="1"/>
+    <rect x="1846" y="88" width="10" height="12" rx="1"/>
+    <rect x="1824" y="108" width="10" height="12" rx="1" fill="#fbbf24"/>
+  </g>
+
+  <!-- Purple/Indigo Night Trees -->
+  <g fill="#4c1d95">
+    <circle cx="100" cy="150" r="17" fill="#3b0764"/>
+    <circle cx="118" cy="146" r="19"/>
+    <circle cx="134" cy="151" r="15" fill="#2e1065"/>
+
+    <circle cx="360" cy="149" r="17" fill="#3b0764"/>
+    <circle cx="378" cy="145" r="20"/>
+
+    <circle cx="610" cy="150" r="18"/>
+    <circle cx="628" cy="146" r="21" fill="#3b0764"/>
+    <circle cx="645" cy="151" r="16" fill="#2e1065"/>
+
+    <circle cx="850" cy="150" r="16"/>
+    <circle cx="868" cy="146" r="18" fill="#3b0764"/>
+
+    <circle cx="1100" cy="149" r="19"/>
+    <circle cx="1120" cy="145" r="22" fill="#3b0764"/>
+
+    <circle cx="1360" cy="149" r="17" fill="#3b0764"/>
+    <circle cx="1378" cy="145" r="20"/>
+
+    <circle cx="1610" cy="150" r="18"/>
+    <circle cx="1628" cy="146" r="21" fill="#3b0764"/>
+    <circle cx="1645" cy="151" r="16" fill="#2e1065"/>
+
+    <circle cx="1850" cy="150" r="16"/>
+    <circle cx="1868" cy="146" r="18" fill="#3b0764"/>
+  </g>
+
+  <!-- Night Streetlights with warm light cones -->
+  <g>
+    <!-- Light cone 1 -->
+    <polygon points="234,136 185,180 285,180" fill="url(#warmLightBeam)"/>
+    <!-- Light cone 2 -->
+    <polygon points="474,136 425,180 525,180" fill="url(#warmLightBeam)"/>
+    <!-- Light cone 3 -->
+    <polygon points="724,136 675,180 775,180" fill="url(#warmLightBeam)"/>
+    <!-- Light cone 4 -->
+    <polygon points="964,136 915,180 1015,180" fill="url(#warmLightBeam)"/>
+    <!-- Light cone 5 -->
+    <polygon points="1234,136 1185,180 1285,180" fill="url(#warmLightBeam)"/>
+    <!-- Light cone 6 -->
+    <polygon points="1474,136 1425,180 1525,180" fill="url(#warmLightBeam)"/>
+    <!-- Light cone 7 -->
+    <polygon points="1724,136 1675,180 1775,180" fill="url(#warmLightBeam)"/>
+    <!-- Light cone 8 -->
+    <polygon points="1964,136 1915,180 2015,180" fill="url(#warmLightBeam)"/>
+
+    <!-- Posts -->
+    <g stroke="#334155" stroke-width="2.5" fill="none">
+      <path d="M210,180 L210,136 Q210,126 222,126 L236,126"/>
+      <path d="M450,180 L450,136 Q450,126 462,126 L476,126"/>
+      <path d="M700,180 L700,136 Q700,126 712,126 L726,126"/>
+      <path d="M940,180 L940,136 Q940,126 952,126 L966,126"/>
+      <path d="M1210,180 L1210,136 Q1210,126 1222,126 L1236,126"/>
+      <path d="M1450,180 L1450,136 Q1450,126 1462,126 L1476,126"/>
+      <path d="M1700,180 L1700,136 Q1700,126 1712,126 L1726,126"/>
+      <path d="M1940,180 L1940,136 Q1940,126 1952,126 L1966,126"/>
+    </g>
+
+    <!-- Glowing Bulb Heads -->
+    <g fill="#fef08a" filter="url(#neonBlur)">
+      <circle cx="234" cy="129" r="3.5"/>
+      <circle cx="474" cy="129" r="3.5"/>
+      <circle cx="724" cy="129" r="3.5"/>
+      <circle cx="964" cy="129" r="3.5"/>
+      <circle cx="1234" cy="129" r="3.5"/>
+      <circle cx="1474" cy="129" r="3.5"/>
+      <circle cx="1724" cy="129" r="3.5"/>
+      <circle cx="1964" cy="129" r="3.5"/>
+    </g>
+  </g>
+</svg>

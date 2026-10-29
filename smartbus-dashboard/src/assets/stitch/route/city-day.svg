@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 180" width="2000" height="180">
+  <defs>
+    <linearGradient id="daySky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#bae6fd" stop-opacity="0.85"/>
+      <stop offset="50%" stop-color="#e0f2fe" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#f1f5f9" stop-opacity="0.95"/>
+    </linearGradient>
+    <filter id="sunGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Sky gradient -->
+  <rect x="0" y="0" width="2000" height="180" fill="url(#daySky)"/>
+
+  <!-- Distant Sun Glow -->
+  <circle cx="550" cy="38" r="28" fill="#fef08a" opacity="0.6" filter="url(#sunGlow)"/>
+  <circle cx="550" cy="38" r="16" fill="#fde047" opacity="0.9"/>
+  <circle cx="1550" cy="38" r="28" fill="#fef08a" opacity="0.6" filter="url(#sunGlow)"/>
+  <circle cx="1550" cy="38" r="16" fill="#fde047" opacity="0.9"/>
+
+  <!-- Clouds (Day) -->
+  <g fill="#ffffff" opacity="0.88">
+    <!-- Cloud cluster 1 -->
+    <ellipse cx="160" cy="35" rx="46" ry="16"/>
+    <ellipse cx="190" cy="28" rx="32" ry="20"/>
+    <ellipse cx="130" cy="38" rx="28" ry="12"/>
+
+    <!-- Cloud cluster 2 -->
+    <ellipse cx="780" cy="42" rx="55" ry="18"/>
+    <ellipse cx="820" cy="32" rx="38" ry="22"/>
+    <ellipse cx="740" cy="46" rx="30" ry="14"/>
+
+    <!-- Cloud cluster 3 -->
+    <ellipse cx="1160" cy="35" rx="46" ry="16"/>
+    <ellipse cx="1190" cy="28" rx="32" ry="20"/>
+    <ellipse cx="1130" cy="38" rx="28" ry="12"/>
+
+    <!-- Cloud cluster 4 -->
+    <ellipse cx="1780" cy="42" rx="55" ry="18"/>
+    <ellipse cx="1820" cy="32" rx="38" ry="22"/>
+    <ellipse cx="1740" cy="46" rx="30" ry="14"/>
+  </g>
+
+  <!-- Distant Buildings Silhouette (Pale Blue-Grey, seamless at y=80) -->
+  <path d="M0,180 L0,80 L50,80 L50,55 L100,55 L100,95 L150,95 L150,40 L195,40 L195,100 L250,100 L250,70 L300,70 L300,110 L370,110 L370,50 L420,50 L420,90 L490,90 L490,35 L540,35 L540,100 L610,100 L610,65 L660,65 L660,105 L730,105 L730,45 L790,45 L790,95 L850,95 L850,60 L910,60 L910,100 L980,100 L980,50 L1040,50 L1040,95 L1120,95 L1120,40 L1180,40 L1180,85 L1240,85 L1240,55 L1290,55 L1290,95 L1350,95 L1350,45 L1400,45 L1400,105 L1460,105 L1460,65 L1520,65 L1520,100 L1590,100 L1590,40 L1650,40 L1650,90 L1720,90 L1720,35 L1780,35 L1780,95 L1840,95 L1840,60 L1900,60 L1900,100 L1950,100 L1950,80 L2000,80 L2000,180 Z" fill="#cbd5e1" opacity="0.65"/>
+
+  <!-- Near Buildings Silhouette (Mid Slate-Grey, seamless at y=65) -->
+  <path d="M0,180 L0,65 L30,65 L30,90 L80,90 L80,60 L130,60 L130,180 M160,180 L160,75 L220,75 L220,180 M260,180 L260,50 L330,50 L330,180 M390,180 L390,70 L440,70 L440,180 M500,180 L500,80 L570,80 L570,180 M630,180 L630,55 L690,55 L690,180 M750,180 L750,70 L820,70 L820,180 M870,180 L870,60 L930,60 L930,180 M1000,180 L1000,75 L1080,75 L1080,180 M1140,180 L1140,60 L1200,60 L1200,180 M1240,180 L1240,75 L1310,75 L1310,180 M1350,180 L1350,50 L1420,50 L1420,180 M1470,180 L1470,70 L1530,70 L1530,180 M1590,180 L1590,80 L1660,80 L1660,180 M1720,180 L1720,55 L1780,55 L1780,180 M1840,180 L1840,70 L1910,70 L1910,180 M1960,180 L1960,65 L2000,65 L2000,180 Z" fill="#94a3b8" opacity="0.6"/>
+
+  <!-- Window dots (Day) -->
+  <g fill="#f8fafc" opacity="0.85">
+    <rect x="40" y="100" width="8" height="11" rx="1"/>
+    <rect x="58" y="100" width="8" height="11" rx="1"/>
+    <rect x="40" y="122" width="8" height="11" rx="1"/>
+    <rect x="58" y="122" width="8" height="11" rx="1"/>
+
+    <rect x="280" y="65" width="10" height="12" rx="1"/>
+    <rect x="305" y="65" width="10" height="12" rx="1"/>
+    <rect x="280" y="85" width="10" height="12" rx="1"/>
+    <rect x="305" y="85" width="10" height="12" rx="1"/>
+
+    <rect x="645" y="75" width="9" height="12" rx="1"/>
+    <rect x="668" y="75" width="9" height="12" rx="1"/>
+    <rect x="645" y="95" width="9" height="12" rx="1"/>
+    <rect x="668" y="95" width="9" height="12" rx="1"/>
+
+    <rect x="1020" y="90" width="9" height="12" rx="1"/>
+    <rect x="1045" y="90" width="9" height="12" rx="1"/>
+    <rect x="1020" y="110" width="9" height="12" rx="1"/>
+    <rect x="1045" y="110" width="9" height="12" rx="1"/>
+
+    <rect x="1370" y="65" width="10" height="12" rx="1"/>
+    <rect x="1395" y="65" width="10" height="12" rx="1"/>
+    <rect x="1370" y="85" width="10" height="12" rx="1"/>
+    <rect x="1395" y="85" width="10" height="12" rx="1"/>
+
+    <rect x="1735" y="75" width="9" height="12" rx="1"/>
+    <rect x="1758" y="75" width="9" height="12" rx="1"/>
+    <rect x="1735" y="95" width="9" height="12" rx="1"/>
+    <rect x="1758" y="95" width="9" height="12" rx="1"/>
+  </g>
+
+  <!-- Green Trees Layer -->
+  <g fill="#22c55e">
+    <circle cx="95" cy="148" r="17" fill="#16a34a"/>
+    <circle cx="112" cy="144" r="19"/>
+    <circle cx="128" cy="149" r="15" fill="#15803d"/>
+
+    <circle cx="355" cy="147" r="17" fill="#16a34a"/>
+    <circle cx="372" cy="143" r="20"/>
+
+    <circle cx="600" cy="148" r="18"/>
+    <circle cx="618" cy="144" r="21" fill="#16a34a"/>
+    <circle cx="635" cy="149" r="16" fill="#15803d"/>
+
+    <circle cx="845" cy="148" r="16"/>
+    <circle cx="862" cy="144" r="18" fill="#16a34a"/>
+
+    <circle cx="1095" cy="147" r="19"/>
+    <circle cx="1115" cy="143" r="22" fill="#16a34a"/>
+
+    <circle cx="1355" cy="147" r="17" fill="#16a34a"/>
+    <circle cx="1372" cy="143" r="20"/>
+
+    <circle cx="1600" cy="148" r="18"/>
+    <circle cx="1618" cy="144" r="21" fill="#16a34a"/>
+    <circle cx="1635" cy="149" r="16" fill="#15803d"/>
+
+    <circle cx="1845" cy="148" r="16"/>
+    <circle cx="1862" cy="144" r="18" fill="#16a34a"/>
+  </g>
+  <!-- Tree trunks -->
+  <g fill="#78350f">
+    <rect x="110" y="158" width="4" height="18" rx="1"/>
+    <rect x="370" y="158" width="4" height="18" rx="1"/>
+    <rect x="616" y="158" width="4" height="18" rx="1"/>
+    <rect x="860" y="158" width="4" height="18" rx="1"/>
+    <rect x="1113" y="158" width="4" height="18" rx="1"/>
+    <rect x="1370" y="158" width="4" height="18" rx="1"/>
+    <rect x="1616" y="158" width="4" height="18" rx="1"/>
+    <rect x="1860" y="158" width="4" height="18" rx="1"/>
+  </g>
+
+  <!-- Modern Daytime Streetlights -->
+  <g stroke="#64748b" stroke-width="2.5" fill="none">
+    <path d="M230,176 L230,135 Q230,126 240,126 L252,126"/>
+    <path d="M470,176 L470,135 Q470,126 480,126 L492,126"/>
+    <path d="M720,176 L720,135 Q720,126 730,126 L742,126"/>
+    <path d="M960,176 L960,135 Q960,126 970,126 L982,126"/>
+    <path d="M1230,176 L1230,135 Q1230,126 1240,126 L1252,126"/>
+    <path d="M1470,176 L1470,135 Q1470,126 1480,126 L1492,126"/>
+    <path d="M1720,176 L1720,135 Q1720,126 1730,126 L1742,126"/>
+    <path d="M1960,176 L1960,135 Q1960,126 1970,126 L1982,126"/>
+  </g>
+  <g fill="#94a3b8">
+    <path d="M248,126 L256,126 L254,130 L250,130 Z"/>
+    <path d="M488,126 L496,126 L494,130 L490,130 Z"/>
+    <path d="M738,126 L746,126 L744,130 L740,130 Z"/>
+    <path d="M978,126 L986,126 L984,130 L980,130 Z"/>
+    <path d="M1248,126 L1256,126 L1254,130 L1250,130 Z"/>
+    <path d="M1488,126 L1496,126 L1494,130 L1490,130 Z"/>
+    <path d="M1738,126 L1746,126 L1744,130 L1740,130 Z"/>
+    <path d="M1978,126 L1986,126 L1984,130 L1980,130 Z"/>
+  </g>
+</svg>
